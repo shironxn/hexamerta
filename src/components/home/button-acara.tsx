@@ -14,7 +14,12 @@ const ButtonAcara = () => {
       >
         Join Acara
       </button>
-      <button className="btn btn-outline">Informasi</button>
+      <button
+        className="btn btn-outline"
+        onClick={() => router.push("/informasi")}
+      >
+        Informasi
+      </button>
     </>
   );
 };

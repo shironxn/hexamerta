@@ -24,7 +24,7 @@ const FormAcara = () => {
           />
         </div>
         <div className="form-control w-full max-w-xs">
-          <select className="select select-bordered">
+          <select className="select select-bordered" required>
             <option disabled selected>
               Kelas
             </option>
@@ -44,6 +44,7 @@ const FormAcara = () => {
       </div>
       <div className="form-control mt-6">
         <button
+          type="submit"
           className="btn btn-primary"
           onClick={() => router.push("/tiket/gw")}
         >
