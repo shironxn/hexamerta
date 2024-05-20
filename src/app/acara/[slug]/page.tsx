@@ -1,3 +1,4 @@
+import { signOut } from "@/actions/auth";
 import { FormAcara } from "@/components/acara/form-acara";
 import Image from "next/image";
 import Link from "next/link";
@@ -5,17 +6,14 @@ import Link from "next/link";
 export default function Page({ params }: { params: { slug: string } }) {
   return (
     <div>
-      <div className="text-sm breadcrumbs">
-        <ul>
-          <li>
-            <Link href={"/"}>Home</Link>
-          </li>
-          <li>Informasi</li>
-        </ul>
-      </div>
       <div className="hero ">
         <div className="hero-content flex-col lg:flex-row-reverse gap-20">
           <div className="text-center lg:text-left space-y-6">
+            <form action={signOut}>
+              <button className="btn" type="submit">
+                logout
+              </button>
+            </form>
             <h1 className="text-5xl font-bold">
               Pementasan Drama Musikal Seni Budaya
             </h1>

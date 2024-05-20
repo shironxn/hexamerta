@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeChanger } from "@/components/nav/theme-changer";
 import { ThemeProvider } from "next-themes";
+import { Navbar } from "@/components/nav/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider>
-          <ThemeChanger />
+          <Navbar />
           <div className="container min-h-screen m-auto flex justify-center items-center">
             {children}
           </div>

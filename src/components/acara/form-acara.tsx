@@ -1,14 +1,14 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { joinAcara } from "@/actions/acara";
 
 const FormAcara = () => {
-  const router = useRouter();
   return (
-    <form className="flex flex-col gap-4 mt-4">
+    <form className="flex flex-col gap-4 mt-4" action={joinAcara}>
       <div className="form-control">
         <input
           type="text"
+          name="nama_lengkap"
           placeholder="Nama lengkap"
           className="input input-bordered"
           required
@@ -17,14 +17,15 @@ const FormAcara = () => {
       <div className="flex gap-2">
         <div className="form-control w-1/2">
           <input
-            type="number"
+            type="text"
+            name="nomor_telepon"
             placeholder="Nomor telepon"
             className="input input-bordered"
             required
           />
         </div>
         <div className="form-control w-full max-w-xs">
-          <select className="select select-bordered" required>
+          <select className="select select-bordered" name="kelas">
             <option disabled selected>
               Kelas
             </option>
@@ -37,17 +38,14 @@ const FormAcara = () => {
       <div className="form-control">
         <input
           type="text"
+          name="informasi"
           placeholder="Darimana kamu tau acara ini"
           className="input input-bordered"
           required
         />
       </div>
       <div className="form-control mt-6">
-        <button
-          type="submit"
-          className="btn btn-primary"
-          onClick={() => router.push("/tiket/gw")}
-        >
+        <button type="submit" className="btn btn-primary">
           Ikuti Acara
         </button>
       </div>
