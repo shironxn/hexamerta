@@ -6,10 +6,15 @@ import { createClient } from "../lib/supabase/server";
 export async function signIn() {
   const supabase = createClient();
 
+  const user = await supabase.auth.getUser();
+  if (!user.error) {
+    redirect("/acara");
+  }
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: "http://localhost:3000/auth/callback?next=/tiket/gw",
+      redirectTo: process.env.BASE_URL + "/auth/callback?next=/acara",
     },
   });
 
@@ -24,9 +29,11 @@ export async function signIn() {
 
 export async function signOut() {
   const supabase = createClient();
-  const { error } = await supabase.auth.signOut();
 
+  const { error } = await supabase.auth.signOut();
   if (error) {
     throw error;
   }
+
+  redirect("/");
 }

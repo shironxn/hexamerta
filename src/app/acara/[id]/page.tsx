@@ -1,9 +1,10 @@
+import { getAcara, getAcaraById } from "@/actions/acara";
 import { signOut } from "@/actions/auth";
 import { FormAcara } from "@/components/acara/form-acara";
 import Image from "next/image";
-import Link from "next/link";
 
-export default function Page({ params }: { params: { slug: string } }) {
+export default async function Page({ params }: { params: { id: string } }) {
+  const acara = await getAcaraById(params.id);
   return (
     <div>
       <div className="hero ">
@@ -14,9 +15,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 logout
               </button>
             </form>
-            <h1 className="text-5xl font-bold">
-              Pementasan Drama Musikal Seni Budaya
-            </h1>
+            <h1 className="text-5xl font-bold">{acara.nama}</h1>
             <Image
               src={"/thumbnail.jpg"}
               alt=""
@@ -27,33 +26,35 @@ export default function Page({ params }: { params: { slug: string } }) {
             <div className="overflow-x-auto">
               <table className="table">
                 <thead>
-                  <tr className="border-b border-black">
-                    <th>ACARA</th>
-                    <th className="border-x border-black">LOKASI</th>
-                    <th>HARGA</th>
+                  <tr className="border-b">
+                    <th>PENYELENGGARA</th>
+                    <th className="border-x">LOKASI</th>
+                    <th className="border-x">HARGA</th>
+                    <th>WAKTU</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="border-none">
-                    <td>Pentas Seni</td>
-                    <td className="border-x border-black">Bunker X6</td>
-                    <td>Rp. 69</td>
+                    <td>{acara.penyelenggara}</td>
+                    <td className="border-x">{acara.lokasi}</td>
+                    <td className="border-x">Rp. {acara.harga}</td>
+                    <td>
+                      {new Date(acara.tanggal_mulai).toLocaleString("en-GB", {
+                        timeZone: "GMT",
+                      })}
+                    </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <p>
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
-            </p>
+            <p>{acara.deskripsi}</p>
           </div>
           <div className="card shrink-0 w-full max-w-sm">
             <div className="card-body">
               <article className="prose">
                 <h2>Formulir Acara</h2>
               </article>
-              <FormAcara />
+              <FormAcara acara_id={acara.id} />
             </div>
           </div>
         </div>

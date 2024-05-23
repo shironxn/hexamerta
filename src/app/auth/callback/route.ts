@@ -29,9 +29,6 @@ export async function GET(request: Request) {
     );
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      console.log("kintil");
-      console.log(next);
-      console.log(`${origin}${next}`);
       return NextResponse.redirect(`${origin}${next}`);
     }
   }
