@@ -86,16 +86,18 @@ export const getAcaraById = async (id: string) => {
   }
 };
 
-export const joinAcara = async (data: Pendaftaran) => {
+export const joinAcara = async (formData: Pendaftaran) => {
   try {
     const supabase = createClient();
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("pendaftaran")
-      .insert<Pendaftaran>(data);
+      .insert<Pendaftaran>(formData)
+      .select()
+      .single();
     if (error) {
       throw error;
     }
-    redirect("/acara/pementasan-drama-musikal-seni-budaya/tiket");
+    redirect(`/acara/${data?.acara_id}/tiket`);
   } catch (error: any) {
     throw error;
   }
