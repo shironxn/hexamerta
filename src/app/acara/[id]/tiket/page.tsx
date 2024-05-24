@@ -1,7 +1,7 @@
 "use client";
 
 import { getPendaftaran } from "@/actions/acara";
-import { QRCode } from "@/components/acara/qrcode";
+import { QRCode } from "@/components/acara/qr-acara";
 import { Pendaftaran } from "@/lib/types/peserta";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
