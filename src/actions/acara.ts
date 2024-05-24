@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { Pendaftaran } from "@/lib/types/peserta";
+import { Pendaftaran, Peserta } from "@/lib/types/peserta";
 import { redirect } from "next/navigation";
 
 export const getUser = async () => {
@@ -38,14 +38,29 @@ export const getPendaftaran = async (acaraId: string) => {
   }
 };
 
-export const getPeserta = async () => {
+export const getAllPendaftaran = async (acaraId: string) => {
   try {
     const supabase = createClient();
-    const user = await getUser();
+    const { data, error } = await supabase
+      .from("pendaftaran")
+      .select()
+      .eq("acara_id", acaraId);
+    if (error) {
+      throw error;
+    }
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getPesertaById = async (id: string) => {
+  try {
+    const supabase = createClient();
     const { data, error } = await supabase
       .from("peserta")
       .select()
-      .eq("id", user.id)
+      .eq("id", id)
       .single();
     if (error) {
       throw error;
@@ -99,6 +114,46 @@ export const joinAcara = async (formData: Pendaftaran) => {
     }
     redirect(`/acara/${data?.acara_id}/tiket`);
   } catch (error: any) {
+    throw error;
+  }
+};
+
+export const mendataPeserta = async (id: string) => {
+  try {
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from("peserta")
+      .update({ status_hadir: true })
+      .eq("id", id)
+      .select()
+      .single();
+    if (error) {
+      throw error;
+    }
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const setStatusPendaftaran = async (id: string, status: string) => {
+  try {
+    const supabase = createClient();
+    const { error } = await supabase
+      .from("pendaftaran")
+      .update({ status_verifikasi: status })
+      .eq("id", id);
+    if (error) {
+      throw error;
+    }
+
+    if (status === "verified") {
+      const { error } = await supabase.from("peserta").insert({ id });
+      if (error) {
+        throw error;
+      }
+    }
+  } catch (error) {
     throw error;
   }
 };

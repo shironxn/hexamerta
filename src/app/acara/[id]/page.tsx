@@ -1,10 +1,12 @@
-import { getAcara, getAcaraById } from "@/actions/acara";
+import { getAcaraById, getPendaftaran } from "@/actions/acara";
 import { signOut } from "@/actions/auth";
 import { FormAcara } from "@/components/acara/form-acara";
+import { QRCode } from "@/components/acara/qr-acara";
 import Image from "next/image";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const acara = await getAcaraById(params.id);
+  const pendaftaran = await getPendaftaran(params.id);
   return (
     <div>
       <div className="hero ">
@@ -50,11 +52,32 @@ export default async function Page({ params }: { params: { id: string } }) {
             <p>{acara.deskripsi}</p>
           </div>
           <div className="card shrink-0 w-full max-w-sm">
-            <div className="card-body">
-              <article className="prose">
-                <h2>Formulir Acara</h2>
-              </article>
-              <FormAcara acara_id={acara.id} />
+            <div className="card-body bg-red-300">
+              {pendaftaran ? (
+                <div className="space-y-3">
+                  <QRCode user_id={pendaftaran?.id} />
+                  <div className="space-y-4">
+                    <div className="flex gap-3">
+                      <div>
+                        <p>Nama lengkap</p>
+                        <p className="p-3 bg-base-200">
+                          {pendaftaran.nama_lengkap}
+                        </p>
+                      </div>
+                      <div>
+                        <p>Kelas</p>
+                        <p className="p-3 bg-base-200"> {pendaftaran.kelas}</p>
+                      </div>
+                    </div>
+                    <div>
+                      <p>Lokasi acara</p>
+                      <p className="p-3 bg-base-200">Bunker X6</p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <FormAcara acara_id={acara.id} />
+              )}
             </div>
           </div>
         </div>
