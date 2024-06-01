@@ -6,7 +6,7 @@ import { ThemeChanger } from "./theme-changer";
 export const Navbar = () => {
   return (
     <nav className="py-2 px-4 fixed w-full top-0 left-0 bg-secondary items-center m-auto z-50 text-base-100 justify-between flex">
-      <div className="hover:text-primary">
+      <div className="hover:text-accent">
         <Link href={"/"}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +24,7 @@ export const Navbar = () => {
           </svg>
         </Link>
       </div>
-      <div className="hover:text-primary">
+      <div className="hover:text-accent">
         <ThemeChanger />
       </div>
     </nav>
