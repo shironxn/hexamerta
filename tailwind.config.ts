@@ -7,14 +7,34 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   daisyui: {
-    themes: ["lofi", "black"],
+    themes: [
+      {
+        light: {
+          ...require("daisyui/src/theming/themes")["lofi"],
+          "base-100": "#f2f7f5",
+          "base-200": "#d3d4d6",
+          "base-300": "#f2f7f5",
+          "base-content": "#475d5b",
+          primary: "#FAAE2B",
+          secondary: "#134e4a",
+        },
+        dark: {
+          ...require("daisyui/src/theming/themes")["black"],
+          "base-100": "#134e4a",
+          "base-200": "#0f433f",
+          "base-300": "#0b3835",
+          primary: "#FAAE2B",
+          secondary: "#FAAE2B",
+        },
+      },
+    ],
   },
   theme: {
     container: {
       padding: "2rem",
       center: true,
       screens: {
-        xl: "1280px",
+        lg: "1024px",
       },
     },
   },

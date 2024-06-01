@@ -1,84 +1,78 @@
-import { getAcaraById, getPendaftaran } from "@/actions/acara";
-import { signOut } from "@/actions/auth";
-import { FormAcara } from "@/components/acara/form-acara";
-import { QRCode } from "@/components/acara/qr-acara";
-import Image from "next/image";
+import { getAcaraById } from "@/actions/acara";
+import { SectionAcara } from "@/components/acara/section-acara";
+import { CalendarFold, Clock, MapPin, User } from "lucide-react";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const acara = await getAcaraById(params.id);
-  const pendaftaran = await getPendaftaran(params.id);
   return (
-    <div>
-      <div className="hero ">
-        <div className="hero-content flex-col lg:flex-row-reverse gap-20">
-          <div className="text-center lg:text-left space-y-6">
-            <form action={signOut}>
-              <button className="btn" type="submit">
-                logout
-              </button>
-            </form>
-            <h1 className="text-5xl font-bold">{acara.nama}</h1>
-            <Image
-              src={"/thumbnail.jpg"}
-              alt=""
-              width={600}
-              height={600}
-              className="w-full"
-            />
-            <div className="overflow-x-auto">
-              <table className="table">
-                <thead>
-                  <tr className="border-b">
-                    <th>PENYELENGGARA</th>
-                    <th className="border-x">LOKASI</th>
-                    <th className="border-x">HARGA</th>
-                    <th>WAKTU</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-none">
-                    <td>{acara.penyelenggara}</td>
-                    <td className="border-x">{acara.lokasi}</td>
-                    <td className="border-x">Rp. {acara.harga}</td>
-                    <td>
-                      {new Date(acara.tanggal_mulai).toLocaleString("en-GB", {
-                        timeZone: "GMT",
-                      })}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <p>{acara.deskripsi}</p>
+    <div className="hero py-20">
+      <div className="space-y-6 w-full">
+        <div className="prose col-span-4">
+          <h1>{acara.nama}</h1>
+        </div>
+        <div className="grid lg:grid-cols-4 w-full gap-y-8 gap-x-4">
+          <div className="lg:col-span-3">
+            <img src={"/thumbnail.jpg"} alt="" className="rounded w-full" />
           </div>
-          <div className="card shrink-0 w-full max-w-sm">
-            <div className="card-body bg-red-300">
-              {pendaftaran ? (
-                <div className="space-y-3">
-                  <QRCode user_id={pendaftaran?.id} />
-                  <div className="space-y-4">
-                    <div className="flex gap-3">
-                      <div>
-                        <p>Nama lengkap</p>
-                        <p className="p-3 bg-base-200">
-                          {pendaftaran.nama_lengkap}
-                        </p>
-                      </div>
-                      <div>
-                        <p>Kelas</p>
-                        <p className="p-3 bg-base-200"> {pendaftaran.kelas}</p>
-                      </div>
-                    </div>
-                    <div>
-                      <p>Lokasi acara</p>
-                      <p className="p-3 bg-base-200">Bunker X6</p>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <FormAcara acara_id={acara.id} />
-              )}
+          <div className="bg-base-200 rounded flex justify-center items-center space-y-4 flex-col w-full py-8 lg:grid-cols-1">
+            <div className="prose">
+              <h2 className="font-bold">Detail Acara</h2>
             </div>
+            <div className="px-4 items-center grid-cols-2 grid gap-4 lg:grid-cols-1">
+              <div className="flex gap-2 text-xs h-full">
+                <User />
+                <div>
+                  <p>Penyelenggara</p>
+                  <p className="font-bold">{acara.penyelenggara}</p>
+                </div>
+              </div>
+              <div className="flex gap-2 text-xs h-full">
+                <CalendarFold />
+                <div>
+                  <p>Tanggal</p>
+                  <p className="font-bold">
+                    {new Date(acara.tanggal_mulai).toLocaleString("en-GB", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                      timeZone: "GMT",
+                    })}
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2 text-xs h-full">
+                <Clock />
+                <div>
+                  <p>Waktu</p>
+                  <p className="font-bold">
+                    {new Date(acara.tanggal_mulai).toLocaleTimeString("en-GB", {
+                      hour: "numeric",
+                      minute: "numeric",
+                      timeZone: "GMT",
+                    })}{" "}
+                    -{" "}
+                    {new Date(acara.tanggal_selesai).toLocaleTimeString(
+                      "en-GB",
+                      {
+                        hour: "numeric",
+                        minute: "numeric",
+                        timeZone: "GMT",
+                      }
+                    )}
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2 text-xs h-full">
+                <MapPin />
+                <div>
+                  <p>Lokasi</p>
+                  <p className="font-bold">{acara.lokasi}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="lg:col-span-3">
+            <SectionAcara acara={acara} />
           </div>
         </div>
       </div>

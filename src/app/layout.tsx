@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeChanger } from "@/components/nav/theme-changer";
 import { ThemeProvider } from "next-themes";
 import { Navbar } from "@/components/nav/navbar";
 
@@ -22,9 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider>
           <Navbar />
-          <div className="container min-h-screen m-auto flex justify-center items-center">
-            {children}
-          </div>
+          <div className="flex justify-center container">{children}</div>
         </ThemeProvider>
       </body>
     </html>

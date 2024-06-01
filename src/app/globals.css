@@ -2,3 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+.card {
+    border-radius: 0.25rem
+}
+
+.btn {
+    border-radius: 0.10rem
+}
+
+.rounded-badge {
+    border-radius: 9999px;
+}
+
+.prose {
+    max-width: none;
+}

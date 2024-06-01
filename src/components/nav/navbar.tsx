@@ -5,7 +5,7 @@ import { ThemeChanger } from "./theme-changer";
 
 export const Navbar = () => {
   return (
-    <nav className="p-4 fixed w-full top-0 left-0">
+    <nav className="p-2 fixed w-full top-0 left-0 bg-secondary items-center z-50 text-base-100">
       <div className="justify-between flex">
         <div>
           <Link href={"/"} className="btn btn-ghost">
@@ -26,9 +26,7 @@ export const Navbar = () => {
           </Link>
         </div>
         <div>
-          <button className="btn btn-ghost">
-            <ThemeChanger />
-          </button>
+          <ThemeChanger />
         </div>
       </div>
     </nav>

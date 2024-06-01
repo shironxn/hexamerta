@@ -55,23 +55,6 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  if (request.nextUrl.pathname.startsWith("/acara")) {
-    const user = await supabase.auth.getUser();
-
-    if (request.nextUrl.pathname.includes("/tiket")) {
-      try {
-        const acaraId = request.nextUrl.pathname.split("/")[2];
-        await getPendaftaran(acaraId);
-      } catch (error) {
-        return NextResponse.redirect(new URL("/", request.url));
-      }
-    }
-
-    if (user.error) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-  }
-
   // refreshing the auth token
   await supabase.auth.getUser();
 

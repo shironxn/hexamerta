@@ -1,8 +1,8 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { Pendaftaran, Peserta } from "@/lib/types/peserta";
-import { redirect } from "next/navigation";
+import { Pendaftaran } from "@/lib/types/peserta";
+import { revalidatePath } from "next/cache";
 
 export const getUser = async () => {
   try {
@@ -101,7 +101,14 @@ export const getAcaraById = async (id: string) => {
   }
 };
 
-export const joinAcara = async (formData: Pendaftaran) => {
+export const joinAcara = async (
+  formData: Pendaftaran,
+  captchaToken: string
+) => {
+  if (!captchaToken) {
+    throw new Error("missing captcha token");
+  }
+
   try {
     const supabase = createClient();
     const { data, error } = await supabase
@@ -112,7 +119,7 @@ export const joinAcara = async (formData: Pendaftaran) => {
     if (error) {
       throw error;
     }
-    redirect(`/acara/${data?.acara_id}/tiket`);
+    revalidatePath(`/acara/${data?.acara_id}`);
   } catch (error: any) {
     throw error;
   }

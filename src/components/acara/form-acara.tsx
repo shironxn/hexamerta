@@ -2,8 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { joinAcara } from "@/actions/acara";
-import { Pendaftaran, PendaftaranSchema } from "@/lib/types/peserta";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Pendaftaran, PendaftaranSchema, Peserta } from "@/lib/types/peserta";
+import { useForm } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
+import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export const FormAcara = ({ acara_id }: { acara_id: string }) => {
   const {
@@ -17,74 +21,119 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
     },
   });
 
-  const onSubmit = async (data: Pendaftaran) => {
-    await joinAcara(data);
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [data, setData] = useState<Pendaftaran>();
+  const captchaRef = useRef<any>();
+  const router = useRouter();
+
+  const onSubmit = (data: Pendaftaran) => {
+    captchaRef.current.execute();
+    setData(data);
   };
 
+  useEffect(() => {
+    if (captchaToken && data) {
+      // joinAcara(data, captchaToken);
+      captchaRef.current.resetCaptcha();
+      setCaptchaToken("");
+    }
+  }, [captchaToken, data]);
+
   return (
-    <>
-      <article className="prose">
-        <h2 className="text-center">Formulir Acara</h2>
-      </article>
-      <form
-        className="flex flex-col gap-4 mt-4"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <div className="form-control">
+    <form
+      className="flex flex-col gap-2 w-full"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <HCaptcha
+        ref={captchaRef}
+        size="invisible"
+        sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY ?? ""}
+        onVerify={setCaptchaToken}
+        languageOverride="id"
+      />
+      <div className="grid lg:grid-cols-2 gap-2">
+        <label className="form-control w-full">
+          <div className="label">
+            <span className="label-text">Nama Lengkap</span>
+          </div>
           <input
             type="text"
-            placeholder="Nama lengkap"
-            className="input input-bordered"
+            className="input input-bordered bordered w-full"
             {...register("nama_lengkap")}
             required
           />
-          {errors.nama_lengkap?.message && (
-            <p>{errors.nama_lengkap?.message}</p>
-          )}
-        </div>
-        <div className="flex gap-2">
-          <div className="form-control w-1/2">
-            <input
-              type="text"
-              placeholder="Nomor telepon"
-              className="input input-bordered"
-              {...register("nomor_telepon")}
-              required
-            />
-            {errors.nomor_telepon?.message && (
-              <p>{errors.nomor_telepon?.message}</p>
-            )}
+          <ErrorMessage errors={errors} name="nama_lengkap" />
+        </label>
+        <label className="form-control w-full">
+          <div className="label">
+            <span className="label-text">Kelas</span>
           </div>
-          <div className="form-control w-full max-w-xs">
-            <select
-              className="select select-bordered"
-              defaultValue={"Kelas"}
-              {...register("kelas")}
-            >
-              <option disabled>Kelas</option>
-              <option>X6</option>
-              <option>X7</option>
-              <option>X8</option>
-            </select>
-            {errors.kelas?.message && <p>{errors.kelas?.message}</p>}
+          <select className="select select-bordered" {...register("kelas")}>
+            <option>X6</option>
+            <option>X7</option>
+            <option>X8</option>
+          </select>
+          <ErrorMessage errors={errors} name="kelas" />
+        </label>
+        <label className="form-control w-full">
+          <div className="label">
+            <span className="label-text">Email</span>
+            <span className="label-text-alt">
+              e-Tiket akan dikirim ke email ini
+            </span>
           </div>
-        </div>
-        <div className="form-control">
           <input
-            type="text"
-            placeholder="Darimana kamu tau acara ini"
-            className="input input-bordered"
-            {...register("sumber_info")}
+            type="email"
+            className="input input-bordered w-full"
+            {...register("email")}
             required
           />
-          {errors.sumber_info?.message && <p>{errors.sumber_info?.message}</p>}
+          <ErrorMessage errors={errors} name="email" />
+        </label>
+        <label className="form-control w-full">
+          <div className="label">
+            <span className="label-text">Nomor Telepon</span>
+          </div>
+          <input
+            type="text"
+            className="input input-bordered w-full"
+            {...register("nomor_telepon")}
+            required
+          />
+          <ErrorMessage errors={errors} name="nomor_telepon" />
+        </label>
+      </div>
+      <label className="form-control w-full">
+        <div className="label">
+          <span className="label-text">Darimana Kamu Tau Acara Ini</span>
         </div>
-        <div className="form-control mt-6">
+        <input
+          type="text"
+          className="input input-bordered w-full"
+          {...register("sumber_info")}
+          required
+        />
+        <ErrorMessage errors={errors} name="sumber_info" />
+      </label>
+      <div className="form-control mt-2">
+        <button type="submit" className="btn btn-primary">
+          Ikuti Acara
+        </button>
+        {/* {captchaToken ? (
           <button type="submit" className="btn btn-primary">
             Ikuti Acara
           </button>
-        </div>
-      </form>
-    </>
+        ) : (
+          <button
+            className="btn btn-disabled"
+            tabIndex={-1}
+            role="button"
+            aria-disabled="true"
+          >
+            Ikuti Acara
+          </button>
+        )} */}
+      </div>
+    </form>
   );
 };

@@ -20,7 +20,7 @@ export const QRCode = ({ user_id }: { user_id?: string }) => {
   };
 
   return (
-    <>
+    <div className="items-center flex flex-col gap-3">
       <Canvas
         logo={{ src: "/thumbnail.jpg", options: { width: 40 } }}
         text={user_id ?? "kosong woy"}
@@ -28,7 +28,7 @@ export const QRCode = ({ user_id }: { user_id?: string }) => {
           errorCorrectionLevel: "M",
           margin: 3,
           scale: 4,
-          width: 200,
+          width: 320,
           color: {
             // dark: "#010599FF",
             // light: "#FFBF60FF",
@@ -41,7 +41,7 @@ export const QRCode = ({ user_id }: { user_id?: string }) => {
       >
         Download
       </button>
-    </>
+    </div>
   );
 };
 

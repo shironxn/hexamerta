@@ -1,25 +1,50 @@
-import { ButtonAcara } from "@/components/home/button-acara";
-import Image from "next/image";
+import Link from "next/link";
+import Marquee from "react-fast-marquee";
+
+const welcomeList: string[] = [
+  "selamat datang", // Indonesia, Malaysia
+  "welcome", // English
+  "bienvenue", // French
+  "willkommen", // German
+  "bienvenido", // Spanish
+  "benvenuto", // Italian
+  "欢迎", // Chinese (Simplified)
+  "ようこそ", // Japanese
+  "환영합니다", // Korean
+  "добро пожаловать", // Russian
+  "ahlan wa sahlan", // Arabic
+  "स्वागत है", // Hindi
+  "bem-vindo", // Portuguese
+  "καλωσόρισμα", // Greek
+  "добре дошли", // Bulgarian
+  "tikai", // Swahili
+];
 
 export default function Home() {
   return (
-    <div className="hero">
-      <div className="hero-content gap-20 flex-col lg:flex-row-reverse">
-        <Image src={"/home.png"} width={300} height={300} alt=""></Image>
-        <div>
-          <article className="prose">
-            <h1>
-              Selamat
-              <br />
-              datang di
-              <br />
-              Hexamerta
-            </h1>
-          </article>
-          <div className="flex gap-4 justify-center mt-4">
-            <ButtonAcara />
-          </div>
-        </div>
+    <div className="lg:max-w-lg text-center prose min-h-screen justify-center flex flex-col">
+      <div className="w-screen lg:w-full">
+        <Marquee className="p-1">
+          {welcomeList.map((item, i) => (
+            <div className="px-2" key={i}>
+              <p>{item}</p>
+            </div>
+          ))}
+        </Marquee>
+      </div>
+      <h1 className="traecking-widest font-bold lg:text-6xl">HEXAMERTA</h1>
+      <p className="mx-2">
+        Provident cupiditate voluptatem et in. Quaerat fugiat ut
+        assumendaexcepturi exercitationem quasi. In deleniti eaque aut
+        repudiandae et a id nisi.
+      </p>
+      <div className="flex flex-col lg:flex-row gap-2 justify-center items-center">
+        <Link href={"/acara"} className="btn btn-primary btn-wide">
+          Acara
+        </Link>
+        <Link href={"/informasi"} className="btn btn-outline btn-wide">
+          Informasi
+        </Link>
       </div>
     </div>
   );
