@@ -2,16 +2,8 @@ import Link from "next/link";
 
 export default function Page() {
   return (
-    <div className="space-y-8">
-      <div className="text-sm breadcrumbs">
-        <ul>
-          <li>
-            <Link href={"/"}>Home</Link>
-          </li>
-          <li>Informasi</li>
-        </ul>
-      </div>
-      <article className="prose m-auto">
+    <div className="space-y-8 max-md:mt-20 min-h-screen md:hero max-w-lg">
+      <article className="prose">
         <h1>Informasi</h1>
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. At odit

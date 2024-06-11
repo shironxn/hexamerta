@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { FormAcara } from "./form-acara";
+import Markdown from "react-markdown";
+import { QRCode } from "./qr-acara";
 
 export const SectionAcara = ({ acara }: { acara: any }) => {
   const [section, setSection] = useState("deskripsi");
@@ -22,16 +24,16 @@ export const SectionAcara = ({ acara }: { acara: any }) => {
           Tiket
         </ToggleButton>
         <ToggleButton
-          active={section === "lokasi"}
-          onClick={() => setSection("lokasi")}
+          active={section === "share"}
+          onClick={() => setSection("share")}
         >
-          Lokasi
+          Share
         </ToggleButton>
       </div>
       <article className="prose">
-        {section === "deskripsi" && Deskripsi(acara)}
-        {section === "tiket" && Tiket(acara)}
-        {section === "lokasi" && Lokasi()}
+        <Deskripsi acara={acara} isVisible={section === "deskripsi"} />
+        <Tiket acara={acara} isVisible={section === "tiket"} />
+        <Share isVisible={section === "share"} />
       </article>
     </div>
   );
@@ -56,30 +58,59 @@ const ToggleButton = ({
   );
 };
 
-const Deskripsi = (acara: any) => {
+const Deskripsi = ({
+  acara,
+  isVisible,
+}: {
+  acara: any;
+  isVisible: boolean;
+}) => {
+  if (!isVisible) return null;
+
   return (
-    <>
-      <h3>Deskripsi Acara</h3>
-      <p>{acara.deskripsi}</p>
-      <h3>Syarat dan Ketentuan</h3>
-      <p>{acara.deskripsi}</p>
-    </>
+    <div data-aos="fade-up">
+      <h3>Tentang Acara</h3>
+      <Markdown>{acara.deskripsi}</Markdown>
+    </div>
   );
 };
 
-const Tiket = (acara: any) => {
+const Tiket = ({ acara, isVisible }: { acara: any; isVisible: boolean }) => {
+  if (!isVisible) return null;
   return (
-    <>
-      <h3>Form Pendaftaran</h3>
+    <div data-aos="fade-up" className="flex justify-center">
       <FormAcara acara_id={acara.id} />
-    </>
+    </div>
   );
 };
 
-const Lokasi = () => {
+const Share = ({ isVisible }: { isVisible: boolean }) => {
+  const [isCopy, setIsCopy] = useState(false);
+
+  const handleClick = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setIsCopy(true);
+    setTimeout(() => setIsCopy(false), 500);
+  };
+
+  if (!isVisible) return null;
   return (
-    <>
-      <h3>Lokasi Acara</h3>
-    </>
+    <div className="items-center m-auto justify-center flex" data-aos="fade-up">
+      <div className="flex items-center flex-col w-1/2 text-center">
+        <h3>Share Acara</h3>
+        <QRCode text={window.location.href} />
+        <p>
+          Pindai kode QR untuk mendapatkan tautan acara, atau{" "}
+          <span
+            className={`link link-primary ${isCopy && "tooltip"}`}
+            data-tip="Tautan disalin!"
+            onClick={handleClick}
+          >
+            klik di sini
+          </span>{" "}
+          untuk menyalin tautan acara.
+        </p>
+      </div>
+    </div>
   );
 };

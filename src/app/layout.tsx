@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { Navbar } from "@/components/nav/navbar";
+import AOSComponent from "@/components/util/aos";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,8 +21,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider>
-          <Navbar />
-          <div className="flex justify-center container">{children}</div>
+          <AOSComponent>
+            <Navbar />
+            <div className="flex justify-center container max-md:p-8">
+              {children}
+            </div>
+          </AOSComponent>
         </ThemeProvider>
       </body>
     </html>

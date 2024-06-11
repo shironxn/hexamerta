@@ -5,43 +5,31 @@ import { Html5QrcodeScanner } from "html5-qrcode";
 import { useState, useEffect } from "react";
 import { mendataPeserta } from "@/actions/acara";
 
-export const QRCode = ({ user_id }: { user_id?: string }) => {
+export const DownloadQRCode = () => {
+  const canvas = document.querySelector("canvas");
+  if (canvas) {
+    const dataUrl = canvas.toDataURL("image/jpeg");
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = "qrcode.jpeg";
+    link.click();
+  }
+};
+
+export const QRCode = ({ text }: { text: string }) => {
   const { Canvas } = useQRCode();
 
-  const downloadQRCode = () => {
-    const canvas = document.querySelector("canvas");
-    if (canvas) {
-      const dataUrl = canvas.toDataURL("image/jpeg");
-      const link = document.createElement("a");
-      link.href = dataUrl;
-      link.download = "qrcode.jpeg";
-      link.click();
-    }
-  };
-
   return (
-    <div className="items-center flex flex-col gap-3">
-      <Canvas
-        logo={{ src: "/thumbnail.jpg", options: { width: 40 } }}
-        text={user_id ?? "kosong woy"}
-        options={{
-          errorCorrectionLevel: "M",
-          margin: 3,
-          scale: 4,
-          width: 320,
-          color: {
-            // dark: "#010599FF",
-            // light: "#FFBF60FF",
-          },
-        }}
-      />
-      <button
-        className="btn btn-outline w-full"
-        onClick={() => downloadQRCode()}
-      >
-        Download
-      </button>
-    </div>
+    <Canvas
+      logo={{ src: "/thumbnail.jpg", options: { width: 40 } }}
+      text={text}
+      options={{
+        errorCorrectionLevel: "M",
+        margin: 3,
+        scale: 4,
+        width: 200,
+      }}
+    />
   );
 };
 

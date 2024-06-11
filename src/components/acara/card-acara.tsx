@@ -4,21 +4,28 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CalendarFold, MapPin, Ticket } from "lucide-react";
+import { Acara } from "@/lib/types";
 
-export const CardAcara = ({ acara }: { acara: any }) => {
+export const CardAcara = ({ acara }: { acara: Acara }) => {
   const router = useRouter();
 
   return (
     <div
-      className="card card-compact bg-base-300 shadow hover:shadow-xl transition duration-100 ease-linear hover:cursor-pointer"
+      className="card card-compact md:card-side bg-base-300 shadow hover:shadow-xl transition duration-100 ease-linear hover:cursor-pointer"
       onClick={() => router.push("/acara/" + acara.id)}
     >
       <figure>
-        <Image src={"/thumbnail.jpg"} alt="Shoes" width={500} height={500} />
+        <Image
+          src={acara.thumbnail_url}
+          alt="poster"
+          width={300}
+          height={300}
+          className="w-full max-md:rounded"
+        />
       </figure>
       <div className="card-body">
         <Link
-          className="card-title hover:link-primary line-clamp-1 text-lg"
+          className="card-title hover:link-primary text-lg"
           href={"/acara/" + acara.id}
         >
           {acara.nama}
@@ -42,6 +49,8 @@ export const CardAcara = ({ acara }: { acara: any }) => {
           <Ticket />
           <p>Rp. {acara.harga}</p>
         </div>
+        <p></p>
+
         <div className="card-actions justify-end">
           <button
             className="btn btn-primary btn-xs"

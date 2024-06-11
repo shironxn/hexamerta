@@ -23,7 +23,7 @@ const welcomeList: string[] = [
 export default function Home() {
   return (
     <div className="lg:max-w-lg text-center prose min-h-screen justify-center flex flex-col">
-      <div className="w-screen lg:w-full">
+      <div className="w-screen lg:w-full" data-aos="fade-down">
         <Marquee className="p-1">
           {welcomeList.map((item, i) => (
             <div className="px-2" key={i}>
@@ -32,13 +32,18 @@ export default function Home() {
           ))}
         </Marquee>
       </div>
-      <h1 className="traecking-widest font-bold lg:text-6xl">HEXAMERTA</h1>
-      <p className="mx-2">
-        Provident cupiditate voluptatem et in. Quaerat fugiat ut
-        assumendaexcepturi exercitationem quasi. In deleniti eaque aut
-        repudiandae et a id nisi.
-      </p>
-      <div className="flex flex-col lg:flex-row gap-2 justify-center items-center">
+      <div data-aos="zoom-out">
+        <h1 className="traecking-widest font-bold lg:text-6xl">HEXAMERTA</h1>
+        <p className="mx-2">
+          Provident cupiditate voluptatem et in. Quaerat fugiat ut
+          assumendaexcepturi exercitationem quasi. In deleniti eaque aut
+          repudiandae et a id nisi.
+        </p>
+      </div>
+      <div
+        className="flex flex-col lg:flex-row gap-2 justify-center items-center"
+        data-aos="fade-up"
+      >
         <Link href={"/acara"} className="btn btn-primary btn-wide">
           Acara
         </Link>

@@ -1,4 +1,3 @@
-import { getPendaftaran } from "@/actions/acara";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -56,7 +55,15 @@ export async function updateSession(request: NextRequest) {
   );
 
   // refreshing the auth token
-  await supabase.auth.getUser();
+  const user = await supabase.auth.getUser();
+
+  if (request.nextUrl.pathname.startsWith("/acara/dashboard") && user.error) {
+    return NextResponse.redirect(new URL("/acara/login", request.url));
+  }
+
+  if (request.nextUrl.pathname.startsWith("/acara/login") && !user.error) {
+    return NextResponse.redirect(new URL("/acara/dashboard", request.url));
+  }
 
   return response;
 }
