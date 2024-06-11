@@ -3,33 +3,43 @@
 import { useQRCode } from "next-qrcode";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { useState, useEffect } from "react";
-import { mendataPeserta } from "@/actions/acara";
+import { setStatusTiket } from "@/actions/acara";
 
 export const DownloadQRCode = () => {
-  const canvas = document.querySelector("canvas");
-  if (canvas) {
-    const dataUrl = canvas.toDataURL("image/jpeg");
-    const link = document.createElement("a");
-    link.href = dataUrl;
-    link.download = "qrcode.jpeg";
-    link.click();
-  }
+  const downloadHandler = () => {
+    const canvas = document.querySelector("canvas");
+    if (canvas) {
+      const dataUrl = canvas.toDataURL("image/jpeg");
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = "qrcode.jpeg";
+      link.click();
+    }
+  };
+
+  return (
+    <button className="btn btn-primary" onClick={downloadHandler}>
+      Download QR Code
+    </button>
+  );
 };
 
 export const QRCode = ({ text }: { text: string }) => {
   const { Canvas } = useQRCode();
 
   return (
-    <Canvas
-      logo={{ src: "/thumbnail.jpg", options: { width: 40 } }}
-      text={text}
-      options={{
-        errorCorrectionLevel: "M",
-        margin: 3,
-        scale: 4,
-        width: 200,
-      }}
-    />
+    <div className="scale-50">
+      <Canvas
+        logo={{ src: "/thumbnail.jpg", options: { width: 40 } }}
+        text={text}
+        options={{
+          errorCorrectionLevel: "M",
+          margin: 3,
+          scale: 4,
+          width: 500,
+        }}
+      />
+    </div>
   );
 };
 
@@ -73,7 +83,8 @@ export const QRScan = () => {
   }, []);
 
   useEffect(() => {
-    scanData && mendataPeserta(scanData).then((data) => console.log(data));
+    scanData &&
+      setStatusTiket(scanData, "digunakan").then((data) => console.log(data));
   }, [scanData]);
 
   return (

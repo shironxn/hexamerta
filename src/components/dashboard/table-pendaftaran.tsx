@@ -1,13 +1,9 @@
 "use client";
 
-import { setStatusPendaftaran } from "@/actions/acara";
-import { Pendaftaran } from "@/lib/types";
+import { setStatusTiket } from "@/actions/acara";
+import { Tiket } from "@/lib/types";
 
-export const TablePendaftaran = ({
-  pendaftaran,
-}: {
-  pendaftaran: Pendaftaran[];
-}) => {
+export const TablePendaftaran = ({ tiket }: { tiket: Tiket[] | null }) => {
   return (
     <div className="overflow-x-auto md:h-1/2 space-y-8">
       <table className="table table-xs md:table-md">
@@ -25,8 +21,8 @@ export const TablePendaftaran = ({
         </thead>
         <tbody>
           {/* row 1 */}
-          {pendaftaran &&
-            pendaftaran.map((item: Pendaftaran, i: number) => (
+          {tiket &&
+            tiket.map((item: Tiket, i: number) => (
               <tr key={i}>
                 <td>
                   <div className="flex items-center gap-3">
@@ -47,14 +43,16 @@ export const TablePendaftaran = ({
                       item.status = e.target.value as
                         | "terverifikasi"
                         | "menunggu"
-                        | "ditolak";
-                      setStatusPendaftaran(item);
+                        | "ditolak"
+                        | "digunakan";
+                      setStatusTiket(item.id, item.status);
                     }}
                     defaultValue={item.status}
                   >
                     <option>menunggu</option>
                     <option>terverifikasi</option>
                     <option>ditolak</option>
+                    <option>digunakan</option>
                   </select>
                 </td>
                 <td>

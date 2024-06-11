@@ -2,10 +2,7 @@ import { QRScan } from "@/components/acara/qr-acara";
 
 export default function Page() {
   return (
-    <div>
-      <article className="prose">
-        <h1>Scan Here</h1>
-      </article>
+    <div className="h-screen items-center flex">
       <QRScan />
     </div>
   );

@@ -1,4 +1,4 @@
-import { getAcara, getPendaftaran } from "@/actions/acara";
+import { getAcara, getTiket } from "@/actions/acara";
 import { TablePendaftaran } from "@/components/dashboard/table-pendaftaran";
 
 export default async function Page() {
@@ -43,7 +43,7 @@ export default async function Page() {
           </div>
           <div className="space-y-4">
             <h1 className="font-bold">List Pendaftar</h1>
-            <TablePendaftaran pendaftaran={await getPendaftaran(acara.id)} />
+            <TablePendaftaran tiket={await getTiket(acara.id)} />
           </div>
         </div>
       )}

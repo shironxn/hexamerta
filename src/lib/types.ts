@@ -16,7 +16,7 @@ export type Acara = {
   tanggal_dibuat: string;
 };
 
-export type Pendaftaran = {
+export type Tiket = {
   id: string;
   acara_id: string;
   nama_lengkap: string;
@@ -24,20 +24,24 @@ export type Pendaftaran = {
   email: string;
   nomor_telepon: string;
   sumber_info: string;
-  status: "terverifikasi" | "menunggu" | "ditolak";
+  status: "terverifikasi" | "menunggu" | "ditolak" | "digunakan";
   tanggal_dibuat: string;
 };
 
-export type Tiket = {
-  id?: string;
+export type Komentar = {
+  id: string;
   acara_id: string;
-  pendaftaran_id: string;
-  status: "aktif" | "kadaluarsa" | "dibatalkan" | "digunakan";
-  tanggal_kadaluarsa?: string;
-  tanggal_dibuat?: string;
+  nama: string;
+  pesan: string;
+  tanggal_dibuat: string;
 };
 
-export const PendaftaranFormSchema = z.object({
+export const LoginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1),
+});
+
+export const TiketFormSchema = z.object({
   acara_id: z.string().optional(),
   nama_lengkap: z
     .string()
@@ -53,10 +57,12 @@ export const PendaftaranFormSchema = z.object({
   tanggal_dibuat: z.string().optional(),
 });
 
-export const LoginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
+export const KomentarFormSchema = z.object({
+  acara_id: z.string().optional(),
+  nama: z.string().min(1).max(30),
+  pesan: z.string().min(1).max(50),
 });
 
-export type PendaftaranForm = z.infer<typeof PendaftaranFormSchema>;
 export type Login = z.infer<typeof LoginSchema>;
+export type TiketForm = z.infer<typeof TiketFormSchema>;
+export type KomentarForm = z.infer<typeof KomentarFormSchema>;

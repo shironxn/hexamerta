@@ -1,203 +1,169 @@
 "use server";
 
+import QRCode from "qrcode";
 import { createClient } from "@/lib/supabase/server";
 import { transporter } from "@/lib/transport";
-import { Acara, Pendaftaran, PendaftaranForm, Tiket } from "@/lib/types";
+import { Acara, TiketForm, Tiket, KomentarForm, Komentar } from "@/lib/types";
 import { PostgrestError } from "@supabase/supabase-js";
+import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 export const getUser = async () => {
-  try {
-    const supabase = createClient();
-    const user = await supabase.auth.getUser();
-    if (user.error) {
-      throw user.error;
-    }
-    return user.data.user;
-  } catch (error) {
-    throw error;
+  const supabase = createClient();
+  const userResponse = await supabase.auth.getUser();
+  if (userResponse.error) {
+    throw userResponse.error;
   }
-};
-
-// export const getPendaftaran = async (acaraId: string) => {
-//   try {
-//     const supabase = createClient();
-//     const user = await getUser();
-//     const { data, error } = await supabase
-//       .from("pendaftaran")
-//       .select()
-//       .match({
-//         acara_id: acaraId,
-//         peserta_id: user.id,
-//       })
-//       .single();
-//     if (error) {
-//       throw error;
-//     }
-//     return data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-export const getPendaftaran = async (acaraId: string) => {
-  try {
-    const supabase = createClient();
-    const { data, error } = await supabase
-      .from("pendaftaran")
-      .select()
-      .eq("acara_id", acaraId);
-    if (error) {
-      throw error;
-    }
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getPesertaById = async (id: string) => {
-  try {
-    const supabase = createClient();
-    const { data, error } = await supabase
-      .from("peserta")
-      .select()
-      .eq("id", id)
-      .single();
-    if (error) {
-      throw error;
-    }
-    return data;
-  } catch (error) {
-    throw error;
-  }
+  return userResponse.data.user;
 };
 
 export const getAcara = async () => {
-  try {
-    const supabase = createClient();
-    const {
-      data,
-      error,
-    }: { data: Acara | null; error: PostgrestError | null } = await supabase
-      .from("acara")
-      .select()
-      .single();
-    if (error) {
-      throw error;
-    }
-
-    return data;
-  } catch (error) {
+  const supabase = createClient();
+  const { data, error }: { data: Acara | null; error: PostgrestError | null } =
+    await supabase.from("acara").select().single();
+  if (error) {
     throw error;
   }
+  return data;
 };
 
 export const getAcaraById = async (id: string) => {
-  try {
-    const supabase = createClient();
-    const { data, error } = await supabase
-      .from("acara")
-      .select()
-      .eq("id", id)
-      .single<Acara>();
-    if (error) {
-      throw error;
-    }
-    return data;
-  } catch (error) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("acara")
+    .select()
+    .eq("id", id)
+    .single<Acara>();
+  if (error) {
     throw error;
   }
+  return data;
 };
 
-export const joinAcara = async (
-  formData: PendaftaranForm,
+export const createTiket = async (
+  formData: TiketForm,
   captchaToken: string
 ) => {
   if (!captchaToken) {
     throw new Error("missing captcha token");
   }
-
   const supabase = createClient();
-  return await supabase
-    .from("pendaftaran")
-    .insert<PendaftaranForm>(formData)
+  const { data, error } = await supabase
+    .from("tiket")
+    .insert<TiketForm>(formData)
     .select()
-    .single<Pendaftaran>();
-};
-
-export const mendataPeserta = async (id: string) => {
-  try {
-    const supabase = createClient();
-    const { data, error } = await supabase
-      .from("peserta")
-      .update({ status_hadir: true })
-      .eq("id", id)
-      .select()
-      .single();
-    if (error) {
-      throw error;
-    }
-    return data;
-  } catch (error) {
+    .single<Tiket>();
+  if (error) {
     throw error;
   }
+  redirect(`/acara/tiket/${data.id}`);
 };
 
-export const setStatusPendaftaran = async (pendaftaran: Pendaftaran) => {
-  try {
-    const supabase = createClient();
-    const { error } = await supabase
-      .from("pendaftaran")
-      .update({ status: pendaftaran.status })
-      .eq("id", pendaftaran.id);
-    if (error) {
-      throw error;
-    }
-
-    const { data } = await supabase
-      .from("tiket")
-      .select()
-      .eq("pendaftaran_id", pendaftaran.id)
-      .single();
-    if (pendaftaran.status === "terverifikasi") {
-      if (!data) {
-        const { data, error } = await supabase.from("tiket").insert<Tiket>({
-          acara_id: pendaftaran.acara_id,
-          pendaftaran_id: pendaftaran.id,
-          status: "aktif",
-        });
-        if (error) {
-          throw error;
-        }
-
-        try {
-          const info = await transporter.sendMail({
-            from: "HEXAMERTA CORPORATION",
-            to: pendaftaran.email,
-            subject: "Hello ✔", // Subject line
-            text: "Hello world?", // plain text body
-            html: "<b>Hello world?</b>", // html body
-          });
-
-          console.log("message send", info.messageId);
-        } catch (error) {
-          console.log(error);
-          throw error;
-        }
-      }
-    } else {
-      if (data) {
-        const { error } = await supabase
-          .from("tiket")
-          .delete()
-          .eq("pendaftaran_id", pendaftaran.id);
-        if (error) {
-          throw error;
-        }
-      }
-    }
-  } catch (error) {
+export const getTiket = async (acaraId: string) => {
+  const supabase = createClient();
+  const {
+    data,
+    error,
+  }: { data: Tiket[] | null; error: PostgrestError | null } = await supabase
+    .from("tiket")
+    .select()
+    .eq("acara_id", acaraId);
+  if (error) {
     throw error;
   }
+  return data;
+};
+
+export const getTiketById = async (id: string) => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("tiket")
+    .select()
+    .eq("id", id)
+    .single<Tiket>();
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+export const setStatusTiket = async (
+  id: string,
+  status: "terverifikasi" | "menunggu" | "ditolak" | "digunakan"
+) => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("tiket")
+    .update({ status: status })
+    .eq("id", id)
+    .select()
+    .single();
+  if (error) {
+    throw error;
+  }
+  if (status === "terverifikasi") {
+    const tiket = await getTiketById(id);
+    const qrCodeDataUrl = await QRCode.toDataURL(
+      data.id || "invalid ticket id"
+    );
+    await transporter.sendMail({
+      from: process.env.NEXT_PUBLIC_NODEMAILER_USER,
+      to: tiket.email,
+      subject: "Hello ✔",
+      text: "HI JAWA",
+      attachments: [
+        {
+          filename: `qrcode-${tiket.id}.png`,
+          path: qrCodeDataUrl,
+        },
+      ],
+    });
+  }
+  return data;
+};
+
+export const createKomentar = async (
+  formData: KomentarForm,
+  captchaToken: string
+) => {
+  if (!captchaToken) {
+    throw new Error("missing captcha token");
+  }
+  const supabase = createClient();
+  const { error } = await supabase
+    .from("komentar")
+    .insert<KomentarForm>(formData);
+  if (error) {
+    throw error;
+  }
+  revalidatePath(`/acara/${formData.acara_id}`);
+};
+
+export const getKomentar = async (acaraId: string) => {
+  const supabase = createClient();
+  const {
+    data,
+    error,
+  }: { data: Komentar[] | null; error: PostgrestError | null } = await supabase
+    .from("komentar")
+    .select()
+    .eq("acara_id", acaraId);
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+export const deleteKomentar = async (id: string) => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("komentar")
+    .delete()
+    .eq("id", id)
+    .select()
+    .single<Komentar>();
+  if (error) {
+    throw error;
+  }
+  revalidatePath(`/acara/${data.acara_id}`);
 };

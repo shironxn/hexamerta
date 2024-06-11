@@ -5,7 +5,7 @@ import { Login, LoginSchema } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const LoginForm = () => {
   const router = useRouter();
@@ -16,7 +16,6 @@ export const LoginForm = () => {
   } = useForm<Login>({ resolver: zodResolver(LoginSchema) });
 
   const [error, setError] = useState<string | null>(null);
-  const [showToast, setShowToast] = useState(false);
 
   const onSubmit = async (data: Login) => {
     try {
@@ -25,16 +24,6 @@ export const LoginForm = () => {
     } catch (error: any) {
       setError(error.message);
     }
-  };
-
-  useEffect(() => {
-    if (error) {
-      setShowToast(true);
-    }
-  }, [error]);
-
-  const handleCloseToast = () => {
-    setShowToast(false);
   };
 
   return (
