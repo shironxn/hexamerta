@@ -197,7 +197,7 @@ const KomentarSection = ({
         setError(error.message);
       }
     }
-  }, [captchaToken, formData]);
+  }, [captchaToken, formData, acara_id]);
 
   if (!isVisible) return null;
   return (

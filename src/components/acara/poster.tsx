@@ -1,6 +1,7 @@
 "use client";
 
 import { Carousel } from "@material-tailwind/react";
+import Image from "next/image";
 
 export const PosterCarousel = ({ url }: { url: string[] }) => {
   return (
@@ -27,7 +28,9 @@ export const PosterCarousel = ({ url }: { url: string[] }) => {
       placeholder="Carousel Placeholder"
     >
       {url.map((item, i) => (
-        <img
+        <Image
+          width={500}
+          height={500}
           key={i}
           src={item}
           alt={`image ${i}`}
