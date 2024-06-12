@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { Navbar } from "@/components/nav/navbar";
 import AOSComponent from "@/components/util/aos";
 import { getUser } from "@/actions/acara";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+});
 
 export const metadata: Metadata = {
   title: "HEXAMERTA",
@@ -21,7 +24,10 @@ export default async function RootLayout({
   const user = await getUser();
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <head>
+        <link rel="icon" href="/icon/favicon.ico" />
+      </head>
+      <body className={poppins.className}>
         <ThemeProvider>
           <AOSComponent>
             <Navbar user={user.data.user} />

@@ -5,17 +5,32 @@ import { Html5QrcodeScanner } from "html5-qrcode";
 import { useState, useEffect } from "react";
 import { setStatusTiket } from "@/actions/acara";
 import { Tiket } from "@/lib/types";
+import html2canvas from "html2canvas-pro";
 
 export const DownloadQRCode = () => {
   const downloadHandler = () => {
-    const canvas = document.querySelector("canvas");
-    if (canvas) {
-      const dataUrl = canvas.toDataURL("image/jpeg");
+    html2canvas(document.body, {
+      allowTaint: true,
+      useCORS: true,
+      logging: true,
+    }).then((canvas) => {
+      const dataUrl = canvas.toDataURL("image/jpg");
+
       const link = document.createElement("a");
       link.href = dataUrl;
-      link.download = "qrcode.jpeg";
+      link.download = "tiket.jpg";
+
       link.click();
-    }
+    });
+
+    // const canvas = document.querySelector("canvas");
+    // if (canvas) {
+    //   const dataUrl = canvas.toDataURL("image/jpeg");
+    //   const link = document.createElement("a");
+    //   link.href = dataUrl;
+    //   link.download = "qrcode.jpeg";
+    //   link.click();
+    // }
   };
 
   return (

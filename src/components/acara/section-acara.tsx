@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createKomentar, deleteKomentar, getUser } from "@/actions/acara";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { ErrorMessage } from "@hookform/error-message";
+import { Copy } from "../util/copy";
 
 export const SectionAcara = ({
   acara,
@@ -116,14 +117,6 @@ const TiketSection = ({
 };
 
 const ShareSection = ({ isVisible }: { isVisible: boolean }) => {
-  const [isCopy, setIsCopy] = useState(false);
-
-  const handleClick = () => {
-    navigator.clipboard.writeText("https://bit.ly/hexamerta");
-    setIsCopy(true);
-    setTimeout(() => setIsCopy(false), 1000);
-  };
-
   if (!isVisible) return null;
   return (
     <div
@@ -133,19 +126,10 @@ const ShareSection = ({ isVisible }: { isVisible: boolean }) => {
       <div>
         <QRCode text={"https://bit.ly/hexamerta"} width={300} />
       </div>
-      <div className="text-center md:text-left md:w-1/2 md:order-2">
-        <h2>Bagikan Acara Ini ke Orang-Orang Terdekatmu!</h2>
-        <p>
-          Pindai kode QR untuk mendapatkan tautan acara, atau{" "}
-          <span
-            className={`link link-primary ${isCopy && "tooltip"}`}
-            data-tip="Tautan berhasil disalin!"
-            onClick={handleClick}
-          >
-            klik di sini
-          </span>{" "}
-          untuk menyalin tautan acara secara instan.
-        </p>
+      <div className="text-center md:text-left md:w-1/2 flex flex-col items-center md:items-start">
+        <h2 className="md:mt-0">Share Event</h2>
+        <p>Pindai kode QR untuk mendapatkan tautan acara.</p>
+        <Copy text="Salin tautan." copy="https://bit.ly/hexamerta" />
       </div>
     </div>
   );

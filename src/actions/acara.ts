@@ -73,15 +73,26 @@ export const createTiket = async (
   redirect(`/acara/tiket/${data.id}`);
 };
 
-export const getTiket = async (acaraId: string) => {
+export const getTiket = async (
+  acaraId: string,
+  search: string,
+  filter: "semua" | "terverifikasi" | "menunggu" | "ditolak" | "digunakan"
+) => {
   const supabase = createClient();
+  const query = search
+    ? supabase.from("tiket").select().textSearch("nama_lengkap", search, {
+        type: "websearch",
+        config: "english",
+      })
+    : supabase.from("tiket").select();
   const {
     data,
     error,
-  }: { data: Tiket[] | null; error: PostgrestError | null } = await supabase
-    .from("tiket")
-    .select()
-    .eq("acara_id", acaraId);
+  }: { data: Tiket[] | null; error: PostgrestError | null } = await query.match(
+    filter === "semua"
+      ? { acara_id: acaraId }
+      : { acara_id: acaraId, status: filter }
+  );
   if (error) {
     throw error;
   }
@@ -109,14 +120,13 @@ export const setStatusTiket = async (
 
   try {
     const tiket = await getTiketById(id);
-    if (!tiket) throw new Error("Tiket tidak valid");
+    if (!tiket) throw new Error("Tiket tidak ditemukan");
     if (status === "digunakan" && tiket.status === "digunakan")
-      throw new Error("Tiket sudah digunakan");
+      throw new Error("Tiket sudah digunakan sebelumnya");
+    if (status === "digunakan" && tiket.status !== "terverifikasi")
+      throw new Error("Tiket harus dalam status terverifikasi untuk digunakan");
   } catch (error: any) {
-    if (error.message === "Tiket sudah digunakan") {
-      throw new Error("Tiket sudah digunakan");
-    }
-    throw new Error("Tiket tidak valid");
+    throw new Error(`Gagal mengatur status tiket: ${error.message}`);
   }
 
   const { data, error } = await supabase
@@ -128,24 +138,33 @@ export const setStatusTiket = async (
   if (error) {
     throw error;
   }
+
   if (status === "terverifikasi") {
     const qrCodeDataUrl = await QRCode.toDataURL(
       data.id || "invalid ticket id"
     );
-    await transporter.sendMail({
+
+    const mailOptions = {
       from: process.env.NEXT_PUBLIC_NODEMAILER_USER,
       to: data.email,
-      subject: "Hello ✔",
-      text: "HI JAWA",
-      attachments: [
-        {
-          filename: `qrcode-${data.id}.png`,
-          path: qrCodeDataUrl,
-        },
-      ],
-    });
+      subject: "Tiket Anda Telah Terverifikasi",
+      html: `
+        <p>Halo,</p>
+        <p>Tiket Anda telah berhasil terverifikasi.</p>
+        <p>Silakan temukan QR Code tiket Anda sebagai lampiran di bawah ini.</p>
+        <img src="${qrCodeDataUrl}" alt="QR Code Tiket">
+        <p>Terima kasih!</p>
+      `,
+    };
+
+    try {
+      await transporter.sendMail(mailOptions);
+    } catch (error: any) {
+      throw error;
+    }
   }
 
+  revalidatePath("/acara/dashboard");
   return data;
 };
 
