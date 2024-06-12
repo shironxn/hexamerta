@@ -174,6 +174,7 @@ export const getKomentar = async (acaraId: string) => {
   }: { data: Komentar[] | null; error: PostgrestError | null } = await supabase
     .from("komentar")
     .select()
+    .order("tanggal_dibuat", { ascending: false })
     .eq("acara_id", acaraId);
   if (error) {
     throw error;

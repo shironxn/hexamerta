@@ -75,6 +75,7 @@ export default async function Page({ params }: Props) {
                     {new Date(acara.tanggal_mulai).toLocaleTimeString("id", {
                       hour: "numeric",
                       minute: "numeric",
+                      timeZone: "GMT",
                     })}{" "}
                     - Selesai
                   </p>

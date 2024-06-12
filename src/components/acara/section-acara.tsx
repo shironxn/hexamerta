@@ -262,7 +262,7 @@ const KomentarSection = ({
         {komentar &&
           komentar.map((item: Komentar, i) => (
             <div
-              className="card card-compact w-full card-bordered shadow"
+              className="card card-compact w-full card-bordered border-base-100 shadow"
               key={i}
             >
               <div className="card-body">
