@@ -22,7 +22,7 @@ const welcomeList: string[] = [
 
 export default function Home() {
   return (
-    <div className="lg:max-w-lg text-center prose min-h-screen justify-center flex flex-col">
+    <div className="lg:max-w-lg text-center prose min-h-screen justify-center flex flex-col w-full fixed">
       <div className="w-screen lg:w-full" data-aos="fade-down">
         <Marquee>
           {welcomeList.map((item, i) => (
