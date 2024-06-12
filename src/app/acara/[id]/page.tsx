@@ -3,6 +3,7 @@ import { SectionAcara } from "@/components/acara/section-acara";
 import { CalendarFold, Clock, MapPin, Ticket, User, Users } from "lucide-react";
 import dynamic from "next/dynamic";
 import { PosterCarousel } from "@/components/acara/poster";
+import type { Metadata } from "next";
 
 const CountdownAcara = dynamic(
   () => import("@/components/acara/countdown-acara"),
@@ -11,7 +12,22 @@ const CountdownAcara = dynamic(
   }
 );
 
-export default async function Page({ params }: { params: { id: string } }) {
+type Props = {
+  params: { id: string };
+};
+
+export const generateMetadata = async ({
+  params,
+}: Props): Promise<Metadata> => {
+  const acara = await getAcaraById(params.id);
+
+  return {
+    title: acara.nama,
+    description: "HEXAMERTA EVENT IS PRESENT",
+  };
+};
+
+export default async function Page({ params }: Props) {
   const acara = await getAcaraById(params.id);
   const tiket = await countTiket(acara.id);
   const komentar = await getKomentar(params.id);

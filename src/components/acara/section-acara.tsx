@@ -94,8 +94,7 @@ const DeskripsiSection = ({
   if (!isVisible) return null;
 
   return (
-    <div data-aos="fade-up">
-      <h3>Tentang Acara</h3>
+    <div data-aos="fade-up" className="pt-4">
       <Markdown>{acara.deskripsi}</Markdown>
     </div>
   );
@@ -276,7 +275,7 @@ const KomentarSection = ({
                     </div>
                   </div>
                   <div>
-                    <div>{item.nama}</div>
+                    <div className="font-bold">{item.nama}</div>
                     <div>{item.pesan}</div>
                   </div>
                 </div>

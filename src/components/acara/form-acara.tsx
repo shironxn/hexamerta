@@ -59,7 +59,6 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
             </div>
             <input
               type="text"
-              placeholder="pijel wibu"
               className="input input-bordered w-full"
               {...register("nama_lengkap")}
               required
@@ -74,7 +73,7 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
             </div>
             <input
               type="text"
-              placeholder="X6"
+              placeholder="ex: X6"
               className="input input-bordered w-full"
               {...register("kelas")}
               required
@@ -92,7 +91,6 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
             </div>
             <input
               type="email"
-              placeholder="ton@gmail.com"
               className="input input-bordered w-full"
               {...register("email")}
               required
@@ -104,11 +102,11 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
           <label className="form-control w-full">
             <div className="label">
               <span className="label-text">Nomor Telepon</span>
-              <span className="label-text-alt">gunakan nomor wangsaff</span>
+              <span className="label-text-alt">gunakan nomor whatsapp</span>
             </div>
             <input
               type="text"
-              placeholder="08XX"
+              placeholder="ex: 08XX"
               className="input input-bordered w-full"
               {...register("nomor_telepon")}
               required
@@ -124,7 +122,6 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
           </div>
           <input
             type="text"
-            placeholder="dari abdul"
             className="input input-bordered w-full"
             {...register("sumber_info")}
             required
