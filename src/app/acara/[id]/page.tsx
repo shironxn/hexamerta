@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const komentar = await getKomentar(params.id);
 
   return (
-    <div className="bg-base-300 pt-20 pb-10">
+    <div className="bg-base-300 pt-20 pb-10 w-full">
       <div className="container mx-auto md:px-4" data-aos="fade-up">
         <div className="text-center md:text-left mb-8">
           <h1 className="text-3xl md:text-4xl font-bold">{acara.nama}</h1>

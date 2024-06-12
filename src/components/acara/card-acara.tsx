@@ -18,8 +18,8 @@ export const CardAcara = ({ acara }: { acara: Acara }) => {
         <Image
           src={acara.thumbnail_url}
           alt="poster"
-          width={300}
-          height={300}
+          width={500}
+          height={500}
           className="w-full max-md:rounded"
         />
       </figure>
