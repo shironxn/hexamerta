@@ -6,8 +6,8 @@ export default async function Page({ params }: { params: { id: string } }) {
   const acara = await getAcaraById(tiket.acara_id);
   return (
     <div className="hero min-h-screen">
-      <div className="hero-content flex-col lg:flex-row-reverse">
-        <div className="w-1/3">
+      <div className="hero-content flex-col lg:flex-row-reverse justify-center">
+        <div className="md:w-1/3">
           <QRCode text={params.id} width={500} />
         </div>
         <div className="prose">

@@ -24,7 +24,7 @@ export default function Home() {
   return (
     <div className="lg:max-w-lg text-center prose min-h-screen justify-center flex flex-col">
       <div className="w-screen lg:w-full" data-aos="fade-down">
-        <Marquee className="p-1">
+        <Marquee>
           {welcomeList.map((item, i) => (
             <div className="px-2" key={i}>
               <p>{item}</p>
