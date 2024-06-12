@@ -46,7 +46,7 @@ export const CardAcara = ({ acara }: { acara: Acara }) => {
         </div>
         <div className="flex items-center gap-2">
           <Ticket />
-          <p>Rp. {acara.harga}</p>
+          <p>{acara.harga !== 0 ? `Rp. ${acara.harga}` : "Free"}</p>
         </div>
         <p></p>
 

@@ -99,7 +99,9 @@ export default async function Page({ params }: Props) {
                 <Ticket />
                 <div>
                   <p className="text-xs">Harga</p>
-                  <p className="font-bold text-sm">Rp. {acara.harga}</p>
+                  <p className="font-bold text-sm">
+                    {acara.harga !== 0 ? `Rp. ${acara.harga}` : "Free"}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
