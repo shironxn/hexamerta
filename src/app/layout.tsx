@@ -18,12 +18,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getUser();
   return (
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider>
           <AOSComponent>
-            <Navbar />
+            <Navbar user={user.data.user} />
             <div className="flex justify-center container max-md:p-8">
               {children}
             </div>

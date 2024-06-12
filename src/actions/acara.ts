@@ -10,11 +10,7 @@ import { revalidatePath } from "next/cache";
 
 export const getUser = async () => {
   const supabase = createClient();
-  const { data, error } = await supabase.auth.getUser();
-  if (error) {
-    throw error;
-  }
-  return data.user;
+  return await supabase.auth.getUser();
 };
 
 export const getAcara = async () => {

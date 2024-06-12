@@ -5,11 +5,8 @@ import { ThemeChanger } from "./theme-changer";
 import { Home, LogOut } from "lucide-react";
 import { signOut } from "@/actions/auth";
 import { User } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
 
-export const Navbar = () => {
-  const [user, setUser] = useState<User | null>(null);
-
+export const Navbar = ({ user }: { user: User | null }) => {
   return (
     <nav className="py-2 px-4 top-0 inset-x-0 items-center z-50 text-secondary flex justify-between md:rounded-md fixed md:mt-2">
       <div className="hover:text-accent">
