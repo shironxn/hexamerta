@@ -1,9 +1,4 @@
-import {
-  countTiket,
-  getAcaraById,
-  getKomentar,
-  getTiket,
-} from "@/actions/acara";
+import { countTiket, getAcaraById, getKomentar } from "@/actions/acara";
 import { SectionAcara } from "@/components/acara/section-acara";
 import { CalendarFold, Clock, MapPin, Ticket, User, Users } from "lucide-react";
 import dynamic from "next/dynamic";
