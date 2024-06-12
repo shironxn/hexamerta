@@ -35,9 +35,7 @@ export default function Home() {
       <div data-aos="zoom-out">
         <h1 className="traecking-widest font-bold lg:text-6xl">HEXAMERTA</h1>
         <p className="mx-2">
-          Welcome to HEXAMERTA, where the spirit of learning is eternal. Join us
-          as we explore the endless possibilities of knowledge and growth,
-          united as one enduring class.
+          Welcome to HEXAMERTA, where six is always eternal.
         </p>
       </div>
       <div
