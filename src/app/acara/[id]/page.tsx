@@ -43,11 +43,10 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <div>
                   <p className="text-xs">Tanggal</p>
                   <p className="font-bold text-sm">
-                    {new Date(acara.tanggal_mulai).toLocaleString("en-GB", {
+                    {new Date(acara.tanggal_mulai).toLocaleString("id", {
                       day: "numeric",
                       month: "short",
                       year: "numeric",
-                      timeZone: "GMT",
                     })}
                   </p>
                 </div>
