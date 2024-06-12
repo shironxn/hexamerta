@@ -4,6 +4,7 @@ import { CalendarFold, Clock, MapPin, Ticket, User, Users } from "lucide-react";
 import dynamic from "next/dynamic";
 import { PosterCarousel } from "@/components/acara/poster";
 import type { Metadata } from "next";
+import Image from "next/image";
 
 const CountdownAcara = dynamic(
   () => import("@/components/acara/countdown-acara"),
@@ -39,8 +40,15 @@ export default async function Page({ params }: Props) {
           <h1 className="text-3xl md:text-4xl font-bold">{acara.nama}</h1>
         </div>
         <div className="grid md:grid-cols-4 gap-4">
-          <div className="md:col-span-3">
-            <PosterCarousel url={acara.poster_url} />
+          <div className="md:col-span-3 w-full">
+            <Image
+              src={"/poster.jpg"}
+              width={1000}
+              height={1000}
+              alt=""
+              className="md:rounded-xl"
+            />
+            {/* <PosterCarousel url={acara.poster_url} /> */}
           </div>
           <div className="card card-compact card-bordered flex justify-center items-center space-y-4 flex-col w-full md:grid-cols-2 shadow py-4">
             <div className="text-center md:text-left">
@@ -59,7 +67,7 @@ export default async function Page({ params }: Props) {
                 <div>
                   <p className="text-xs">Tanggal</p>
                   <p className="font-bold text-sm">
-                    {new Date(acara.tanggal_mulai).toLocaleString("id", {
+                    {new Date(acara.tanggal_mulai).toLocaleString("UTC", {
                       day: "numeric",
                       month: "short",
                       year: "numeric",
@@ -72,10 +80,9 @@ export default async function Page({ params }: Props) {
                 <div>
                   <p className="text-xs">Waktu</p>
                   <p className="font-bold text-sm">
-                    {new Date(acara.tanggal_mulai).toLocaleTimeString("id", {
+                    {new Date(acara.tanggal_mulai).toLocaleTimeString("UTC", {
                       hour: "numeric",
                       minute: "numeric",
-                      timeZone: "GMT",
                     })}{" "}
                     - Selesai
                   </p>

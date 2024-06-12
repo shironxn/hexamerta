@@ -56,7 +56,7 @@ export const TablePendaftaran = ({ tiket }: { tiket: Tiket[] | null }) => {
                   </select>
                 </td>
                 <td>
-                  {new Date(item.tanggal_dibuat).toLocaleString("id", {
+                  {new Date(item.tanggal_dibuat).toLocaleString("UTC", {
                     dateStyle: "medium",
                     timeStyle: "long",
                   })}

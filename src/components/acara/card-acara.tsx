@@ -33,11 +33,10 @@ export const CardAcara = ({ acara }: { acara: Acara }) => {
         <div className="flex items-center gap-2">
           <CalendarFold />
           <p className="line-clamp-2">
-            {new Date(acara.tanggal_mulai).toLocaleString("en-GB", {
+            {new Date(acara.tanggal_mulai).toLocaleString("UTC", {
               day: "numeric",
               month: "short",
               year: "numeric",
-              timeZone: "GMT",
             })}
           </p>
         </div>
