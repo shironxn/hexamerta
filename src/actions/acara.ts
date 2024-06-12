@@ -5,22 +5,25 @@ import { createClient } from "@/lib/supabase/server";
 import { transporter } from "@/lib/transport";
 import { Acara, TiketForm, Tiket, KomentarForm, Komentar } from "@/lib/types";
 import { PostgrestError } from "@supabase/supabase-js";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 export const getUser = async () => {
   const supabase = createClient();
-  const userResponse = await supabase.auth.getUser();
-  if (userResponse.error) {
-    throw userResponse.error;
+  const { data, error } = await supabase.auth.getUser();
+  if (error) {
+    throw error;
   }
-  return userResponse.data.user;
+  return data.user;
 };
 
 export const getAcara = async () => {
   const supabase = createClient();
   const { data, error }: { data: Acara | null; error: PostgrestError | null } =
     await supabase.from("acara").select().single();
+  if (!data) {
+    return notFound();
+  }
   if (error) {
     throw error;
   }
@@ -34,10 +37,25 @@ export const getAcaraById = async (id: string) => {
     .select()
     .eq("id", id)
     .single<Acara>();
+  if (!data) {
+    return notFound();
+  }
   if (error) {
     throw error;
   }
   return data;
+};
+
+export const countTiket = async (acara_id: string) => {
+  const supabase = createClient();
+  const { count, error } = await supabase
+    .from("tiket")
+    .select("count", { count: "exact" })
+    .match({ acara_id: acara_id, status: "digunakan" });
+  if (error) {
+    throw error;
+  }
+  return count;
 };
 
 export const createTiket = async (

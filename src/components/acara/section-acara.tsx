@@ -23,7 +23,7 @@ export const SectionAcara = ({
 
   return (
     <div className="space-y-5">
-      <div className="flex gap-2">
+      <div className="flex gap-2 justify-center md:justify-start">
         <ToggleButton
           active={section === "deskripsi"}
           onClick={() => setSection("deskripsi")}
@@ -49,7 +49,7 @@ export const SectionAcara = ({
           Komentar
         </ToggleButton>
       </div>
-      <article className="prose">
+      <article className="prose px-4">
         <DeskripsiSection acara={acara} isVisible={section === "deskripsi"} />
         <TiketSection acara={acara} isVisible={section === "tiket"} />
         <ShareSection isVisible={section === "share"} />
@@ -74,7 +74,9 @@ const ToggleButton = ({
 }) => {
   return (
     <button
-      className={`btn btn-outline rounded-badge ${active ? "btn-active" : ""}`}
+      className={`btn btn-outline rounded-badge btn-sm md:btn-md ${
+        active ? "btn-active" : ""
+      }`}
       onClick={onClick}
     >
       {children}
@@ -120,28 +122,30 @@ const ShareSection = ({ isVisible }: { isVisible: boolean }) => {
   const handleClick = () => {
     navigator.clipboard.writeText(window.location.href);
     setIsCopy(true);
-    setTimeout(() => setIsCopy(false), 500);
+    setTimeout(() => setIsCopy(false), 1000);
   };
 
   if (!isVisible) return null;
   return (
     <div
-      className="grid grid-cols-2 justify-center items-center"
+      className="flex flex-col-reverse md:flex-row items-center justify-center w-full"
       data-aos="fade-up"
     >
-      <QRCode text={window.location.href} />
       <div>
-        <h2>Bagikan Acara Ke Orang Terdekatmu</h2>
+        <QRCode text={window.location.href} width={350} />
+      </div>
+      <div className="text-center md:text-left md:w-1/2 md:order-2">
+        <h2>Bagikan Acara Ini ke Orang-Orang Terdekatmu!</h2>
         <p>
           Pindai kode QR untuk mendapatkan tautan acara, atau{" "}
           <span
             className={`link link-primary ${isCopy && "tooltip"}`}
-            data-tip="Tautan disalin!"
+            data-tip="Tautan berhasil disalin!"
             onClick={handleClick}
           >
             klik di sini
           </span>{" "}
-          untuk menyalin tautan acara.
+          untuk menyalin tautan acara secara instan.
         </p>
       </div>
     </div>

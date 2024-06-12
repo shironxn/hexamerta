@@ -24,7 +24,7 @@ export const DownloadQRCode = () => {
   );
 };
 
-export const QRCode = ({ text }: { text: string }) => {
+export const QRCode = ({ text, width }: { text: string; width: number }) => {
   const { Canvas } = useQRCode();
 
   return (
@@ -36,7 +36,7 @@ export const QRCode = ({ text }: { text: string }) => {
           errorCorrectionLevel: "M",
           margin: 3,
           scale: 4,
-          width: 500,
+          width: width,
         }}
       />
     </div>

@@ -7,7 +7,9 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <div className="hero min-h-screen">
       <div className="hero-content flex-col lg:flex-row-reverse">
-        <QRCode text={params.id} />
+        <div className="w-1/3">
+          <QRCode text={params.id} width={500} />
+        </div>
         <div className="prose">
           <h1 className="font-bold">{acara.nama}</h1>
           <div className="overflow-x-auto">

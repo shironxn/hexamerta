@@ -58,10 +58,10 @@ export async function updateSession(request: NextRequest) {
   const user = await supabase.auth.getUser();
 
   if (request.nextUrl.pathname.startsWith("/acara/dashboard") && user.error) {
-    return NextResponse.redirect(new URL("/acara/login", request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (request.nextUrl.pathname.startsWith("/acara/login") && !user.error) {
+  if (request.nextUrl.pathname.startsWith("/login") && !user.error) {
     return NextResponse.redirect(new URL("/acara/dashboard", request.url));
   }
 
