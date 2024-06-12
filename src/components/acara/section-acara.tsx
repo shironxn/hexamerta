@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createKomentar, deleteKomentar, getUser } from "@/actions/acara";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { ErrorMessage } from "@hookform/error-message";
-import { Copy } from "../util/copy";
+import { Copy } from "@/components/util/copy";
 
 export const SectionAcara = ({
   acara,
