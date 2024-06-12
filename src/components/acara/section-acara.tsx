@@ -119,7 +119,7 @@ const ShareSection = ({ isVisible }: { isVisible: boolean }) => {
   const [isCopy, setIsCopy] = useState(false);
 
   const handleClick = () => {
-    navigator.clipboard.writeText(window.location.href);
+    navigator.clipboard.writeText("https://bit.ly/hexamerta");
     setIsCopy(true);
     setTimeout(() => setIsCopy(false), 1000);
   };
@@ -131,7 +131,7 @@ const ShareSection = ({ isVisible }: { isVisible: boolean }) => {
       data-aos="fade-up"
     >
       <div>
-        <QRCode text={window.location.href} width={300} />
+        <QRCode text={"https://bit.ly/hexamerta"} width={300} />
       </div>
       <div className="text-center md:text-left md:w-1/2 md:order-2">
         <h2>Bagikan Acara Ini ke Orang-Orang Terdekatmu!</h2>
