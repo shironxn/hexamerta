@@ -31,7 +31,6 @@ export const QRCode = ({ text, width }: { text: string; width: number }) => {
   return (
     <div className="scale-50">
       <Canvas
-        logo={{ src: "/logo.jpg", options: { width: 80 } }}
         text={text}
         options={{
           errorCorrectionLevel: "M",
