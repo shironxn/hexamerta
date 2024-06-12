@@ -80,11 +80,11 @@ export default async function Page({ params }: Props) {
                 <div>
                   <p className="text-xs">Waktu</p>
                   <p className="font-bold text-sm">
-                    {new Date(acara.tanggal_mulai).toLocaleTimeString("UTC", {
+                    {/* {new Date(acara.tanggal_mulai).toLocaleTimeString("UTC", {
                       hour: "numeric",
                       minute: "numeric",
-                    })}{" "}
-                    - Selesai
+                    })}{" "} */}
+                    15:30 - Selesai
                   </p>
                 </div>
               </div>
