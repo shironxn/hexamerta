@@ -25,9 +25,7 @@ export default async function RootLayout({
         <ThemeProvider>
           <AOSComponent>
             <Navbar user={user.data.user} />
-            <div className="flex justify-center container max-md:p-8">
-              {children}
-            </div>
+            <div className="flex justify-center container">{children}</div>
           </AOSComponent>
         </ThemeProvider>
       </body>
