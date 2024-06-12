@@ -64,7 +64,9 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
               {...register("nama_lengkap")}
               required
             />
-            <ErrorMessage errors={errors} name="nama_lengkap" />
+            <div className="text-xs mt-2">
+              <ErrorMessage errors={errors} name="nama_lengkap" />
+            </div>
           </label>
           <label className="form-control w-full">
             <div className="label">
@@ -77,7 +79,9 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
               {...register("kelas")}
               required
             />
-            <ErrorMessage errors={errors} name="kelas" />
+            <div className="text-xs mt-2">
+              <ErrorMessage errors={errors} name="kelas" />
+            </div>
           </label>
           <label className="form-control w-full">
             <div className="label">
@@ -93,7 +97,9 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
               {...register("email")}
               required
             />
-            <ErrorMessage errors={errors} name="email" />
+            <div className="text-xs mt-2">
+              <ErrorMessage errors={errors} name="email" />
+            </div>
           </label>
           <label className="form-control w-full">
             <div className="label">
@@ -107,7 +113,9 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
               {...register("nomor_telepon")}
               required
             />
-            <ErrorMessage errors={errors} name="nomor_telepon" />
+            <div className="text-xs mt-2">
+              <ErrorMessage errors={errors} name="nomor_telepon" />
+            </div>
           </label>
         </div>
         <label className="form-control w-full">
@@ -121,7 +129,9 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
             {...register("sumber_info")}
             required
           />
-          <ErrorMessage errors={errors} name="sumber_info" />
+          <div className="text-xs mt-2">
+            <ErrorMessage errors={errors} name="sumber_info" />
+          </div>
         </label>
         <div className="form-control mt-2">
           <button type="submit" className="btn btn-primary">
