@@ -132,7 +132,7 @@ const ShareSection = ({ isVisible }: { isVisible: boolean }) => {
       data-aos="fade-up"
     >
       <div>
-        <QRCode text={window.location.href} width={350} />
+        <QRCode text={window.location.href} width={300} />
       </div>
       <div className="text-center md:text-left md:w-1/2 md:order-2">
         <h2>Bagikan Acara Ini ke Orang-Orang Terdekatmu!</h2>
