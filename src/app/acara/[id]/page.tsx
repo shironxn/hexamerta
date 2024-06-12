@@ -67,7 +67,7 @@ export default async function Page({ params }: Props) {
                 <div>
                   <p className="text-xs">Tanggal</p>
                   <p className="font-bold text-sm">
-                    {new Date(acara.tanggal_mulai).toLocaleString("UTC", {
+                    {new Date(acara.tanggal_mulai).toLocaleString("id", {
                       day: "numeric",
                       month: "short",
                       year: "numeric",
@@ -80,7 +80,7 @@ export default async function Page({ params }: Props) {
                 <div>
                   <p className="text-xs">Waktu</p>
                   <p className="font-bold text-sm">
-                    {/* {new Date(acara.tanggal_mulai).toLocaleTimeString("UTC", {
+                    {/* {new Date(acara.tanggal_mulai).toLocaleTimeString("id", {
                       hour: "numeric",
                       minute: "numeric",
                     })}{" "} */}

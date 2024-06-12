@@ -47,7 +47,7 @@ export const countTiket = async (acara_id: string) => {
   const { count, error } = await supabase
     .from("tiket")
     .select("count", { count: "exact" })
-    .match({ acara_id: acara_id, status: "digunakan" });
+    .match({ acara_id: acara_id, status: "terverifikasi" });
   if (error) {
     throw error;
   }

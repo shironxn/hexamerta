@@ -31,7 +31,7 @@ export default async function Page() {
                     </td>
                     <td>{acara.penyelenggara}</td>
                     <td>
-                      {new Date(acara.tanggal_dibuat).toLocaleString("UTC", {
+                      {new Date(acara.tanggal_dibuat).toLocaleString("id", {
                         dateStyle: "medium",
                         timeStyle: "long",
                       })}
