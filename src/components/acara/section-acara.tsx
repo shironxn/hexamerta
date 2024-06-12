@@ -88,7 +88,7 @@ const DeskripsiSection = ({
   acara,
   isVisible,
 }: {
-  acara: any;
+  acara: Acara;
   isVisible: boolean;
 }) => {
   if (!isVisible) return null;
@@ -104,7 +104,7 @@ const TiketSection = ({
   acara,
   isVisible,
 }: {
-  acara: any;
+  acara: Acara;
   isVisible: boolean;
 }) => {
   if (!isVisible) return null;

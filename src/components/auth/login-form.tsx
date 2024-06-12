@@ -19,7 +19,7 @@ export const LoginForm = () => {
 
   const onSubmit = async (data: Login) => {
     try {
-      const login = await signIn(data);
+      await signIn(data);
       router.push("/acara/dashboard");
     } catch (error: any) {
       setError(error.message);
