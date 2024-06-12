@@ -23,7 +23,7 @@ export default async function RootLayout({
       <body className={inter.className}>
         <ThemeProvider>
           <AOSComponent>
-            <Navbar userData={getUser()} />
+            <Navbar />
             <div className="flex justify-center container max-md:p-8">
               {children}
             </div>
