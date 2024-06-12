@@ -55,14 +55,18 @@ export async function updateSession(request: NextRequest) {
   );
 
   // refreshing the auth token
-  const user = await supabase.auth.getUser();
+  try {
+    const user = await supabase.auth.getUser();
 
-  if (request.nextUrl.pathname.startsWith("/acara/dashboard") && user.error) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+    if (request.nextUrl.pathname.startsWith("/acara/dashboard") && user.error) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
 
-  if (request.nextUrl.pathname.startsWith("/login") && !user.error) {
-    return NextResponse.redirect(new URL("/acara/dashboard", request.url));
+    if (request.nextUrl.pathname.startsWith("/login") && !user.error) {
+      return NextResponse.redirect(new URL("/acara/dashboard", request.url));
+    }
+  } catch (error) {
+    return response;
   }
 
   return response;
