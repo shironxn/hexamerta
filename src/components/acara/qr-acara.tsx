@@ -4,6 +4,7 @@ import { useQRCode } from "next-qrcode";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { useState, useEffect } from "react";
 import { setStatusTiket } from "@/actions/acara";
+import { Tiket } from "@/lib/types";
 
 export const DownloadQRCode = () => {
   const downloadHandler = () => {
@@ -45,6 +46,7 @@ export const QRCode = ({ text, width }: { text: string; width: number }) => {
 
 export const QRScan = () => {
   const [scanData, setScanData] = useState("");
+  const [scanResult, setScanResult] = useState<Tiket | Error | null>(null);
 
   const errorHandler = (error: any) => {
     return (
@@ -79,17 +81,38 @@ export const QRScan = () => {
       },
       false
     );
-    qrCodeScanner.render((result) => setScanData(result), errorHandler);
+    qrCodeScanner.render(async (result) => {
+      setScanData(result);
+    }, errorHandler);
   }, []);
 
   useEffect(() => {
     scanData &&
-      setStatusTiket(scanData, "digunakan").then((data) => console.log(data));
+      setStatusTiket(scanData, "digunakan")
+        .then(setScanResult)
+        .catch(setScanResult);
   }, [scanData]);
 
   return (
-    <div>
-      <div id="reader"></div>
+    <div className="flex flex-col items-center mt-8">
+      <div id="reader" className="mb-4"></div>
+      {scanResult && (
+        <dialog id="my_modal_5" className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">Scan Result</h3>
+            <p className="py-4">
+              {scanResult instanceof Error
+                ? scanResult.message
+                : JSON.stringify(scanResult)}
+            </p>
+            <div className="modal-action">
+              <button className="btn" onClick={() => setScanResult(null)}>
+                Close
+              </button>
+            </div>
+          </div>
+        </dialog>
+      )}
     </div>
   );
 };

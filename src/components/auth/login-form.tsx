@@ -50,7 +50,7 @@ export const LoginForm = () => {
           required
         />
       </div>
-      <div className="form-control mt-2">
+      <div className="form-control mt-4">
         <button className="btn btn-primary" type="submit">
           Login
         </button>

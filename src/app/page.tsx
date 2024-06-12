@@ -35,9 +35,9 @@ export default function Home() {
       <div data-aos="zoom-out">
         <h1 className="traecking-widest font-bold lg:text-6xl">HEXAMERTA</h1>
         <p className="mx-2">
-          Provident cupiditate voluptatem et in. Quaerat fugiat ut
-          assumendaexcepturi exercitationem quasi. In deleniti eaque aut
-          repudiandae et a id nisi.
+          Welcome to HEXAMERTA, where the spirit of learning is eternal. Join us
+          as we explore the endless possibilities of knowledge and growth,
+          united as one enduring class.
         </p>
       </div>
       <div

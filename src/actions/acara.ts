@@ -110,33 +110,46 @@ export const setStatusTiket = async (
   status: "terverifikasi" | "menunggu" | "ditolak" | "digunakan"
 ) => {
   const supabase = createClient();
+
+  try {
+    const tiket = await getTiketById(id);
+    if (!tiket) throw new Error("Tiket tidak valid");
+    if (status === "digunakan" && tiket.status === "digunakan")
+      throw new Error("Tiket sudah digunakan");
+  } catch (error: any) {
+    if (error.message === "Tiket sudah digunakan") {
+      throw new Error("Tiket sudah digunakan");
+    }
+    throw new Error("Tiket tidak valid");
+  }
+
   const { data, error } = await supabase
     .from("tiket")
     .update({ status: status })
     .eq("id", id)
     .select()
-    .single();
+    .single<Tiket>();
   if (error) {
     throw error;
   }
   if (status === "terverifikasi") {
-    const tiket = await getTiketById(id);
     const qrCodeDataUrl = await QRCode.toDataURL(
       data.id || "invalid ticket id"
     );
     await transporter.sendMail({
       from: process.env.NEXT_PUBLIC_NODEMAILER_USER,
-      to: tiket.email,
+      to: data.email,
       subject: "Hello ✔",
       text: "HI JAWA",
       attachments: [
         {
-          filename: `qrcode-${tiket.id}.png`,
+          filename: `qrcode-${data.id}.png`,
           path: qrCodeDataUrl,
         },
       ],
     });
   }
+
   return data;
 };
 
