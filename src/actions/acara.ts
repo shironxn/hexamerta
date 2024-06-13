@@ -44,14 +44,29 @@ export const getAcaraById = async (id: string) => {
 
 export const countTiket = async (acara_id: string) => {
   const supabase = createClient();
-  const { count, error } = await supabase
+
+  const { count: usedTickets, error: errorUsed } = await supabase
+    .from("tiket")
+    .select("count", { count: "exact" })
+    .match({ acara_id: acara_id, status: "digunakan" });
+
+  if (errorUsed) {
+    throw errorUsed;
+  }
+
+  const { count: verifiedTickets, error: errorVerified } = await supabase
     .from("tiket")
     .select("count", { count: "exact" })
     .match({ acara_id: acara_id, status: "terverifikasi" });
-  if (error) {
-    throw error;
+
+  if (errorVerified) {
+    throw errorVerified;
   }
-  return count;
+
+  if (usedTickets && verifiedTickets) {
+    const totalCount = usedTickets + verifiedTickets;
+    return totalCount;
+  }
 };
 
 export const createTiket = async (

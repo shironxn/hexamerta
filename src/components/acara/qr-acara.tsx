@@ -51,7 +51,8 @@ export const QRCode = ({ text, width }: { text: string; width: number }) => {
 
 export const QRScan = () => {
   const [scanData, setScanData] = useState("");
-  const [scanResult, setScanResult] = useState<Tiket | Error | null>(null);
+  const [scanResult, setScanResult] = useState<Tiket | null>(null);
+  const [scanError, setScanError] = useState<string | null>(null);
 
   const errorHandler = (error: any) => {
     return (
@@ -95,51 +96,48 @@ export const QRScan = () => {
     scanData &&
       setStatusTiket(scanData, "digunakan")
         .then(setScanResult)
-        .catch(setScanResult);
+        .catch((error: any) => setScanError(error.message));
   }, [scanData]);
 
   return (
     <div className="flex flex-col items-center mt-8">
       <div id="reader" className="mb-4"></div>
-      {scanResult && (
+      {(scanResult || scanError) && (
         <dialog id="my_modal_5" className="modal modal-open">
           <div className="modal-box">
             <div>
-              {scanResult instanceof Error ? (
+              {scanError ? (
                 <div>
                   <h3 className="font-bold text-lg">Tiket Tidak Valid</h3>
-                  <p className="py-4">{scanResult.message}</p>
+                  <p className="py-4">{scanError}</p>
                 </div>
               ) : (
                 <div className="p-4 space-y-4">
                   <h3 className="font-bold text-lg">Tiket Valid</h3>
                   <div className="flex items-center">
                     <p className="w-20 font-bold">Nama:</p>
-                    <p>{scanResult.nama_lengkap}</p>
+                    <p>{scanResult!.nama_lengkap}</p>
                   </div>
 
                   <div className="flex items-center">
                     <p className="w-20 font-bold">Kelas:</p>
-                    <p>{scanResult.kelas}</p>
+                    <p>{scanResult!.kelas}</p>
                   </div>
 
                   <div className="flex items-center">
                     <p className="w-20 font-bold">Telepon:</p>
-                    <p>{scanResult.nomor_telepon}</p>
+                    <p>{scanResult!.nomor_telepon}</p>
                   </div>
 
                   <div className="flex items-center">
                     <p className="w-20 font-bold">Email:</p>
-                    <p>{scanResult.email}</p>
+                    <p>{scanResult!.email}</p>
                   </div>
                 </div>
               )}
             </div>
             <div className="modal-action">
-              <button
-                className="btn"
-                onClick={() => document.location.reload()}
-              >
+              <button className="btn" onClick={() => window.location.reload()}>
                 Close
               </button>
             </div>
