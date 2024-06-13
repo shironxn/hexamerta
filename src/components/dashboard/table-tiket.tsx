@@ -99,7 +99,7 @@ export const TableTiket = ({ acara_id }: { acara_id: string }) => {
                     <td>
                       {new Date(item.tanggal_dibuat).toLocaleString("id", {
                         dateStyle: "medium",
-                        timeStyle: "long",
+                        timeStyle: "medium",
                       })}
                     </td>
                   </tr>
