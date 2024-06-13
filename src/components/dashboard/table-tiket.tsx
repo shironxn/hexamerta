@@ -36,7 +36,7 @@ export const TableTiket = ({ acara_id }: { acara_id: string }) => {
           <Search className="w-4" />
         </label>
         <select
-          className="select select-bordered w-full max-w-xs"
+          className="select select-bordered w-full md:max-w-xs"
           onChange={(e) => setFilter(e.target.value as PropsFilter)}
         >
           <option>semua</option>
