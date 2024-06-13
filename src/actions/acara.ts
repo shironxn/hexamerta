@@ -158,7 +158,7 @@ export const setStatusTiket = async (
       html: `
         <p>Halo,</p>
         <p>Tiket Anda telah berhasil terverifikasi.</p>
-        <p>Silakan temukan QR Code tiket Anda sebagai lampiran di bawah ini.</p>
+        <p>QR Code tiket Anda ada di lampiran bawah ini.</p>
         <img src="${qrCodeDataUrl}" alt="QR Code Tiket">
         <p>Terima kasih!</p>
       `,

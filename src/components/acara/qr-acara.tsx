@@ -26,7 +26,7 @@ export const DownloadTiket = ({ nama }: { nama: string }) => {
 
   return (
     <button className="btn btn-primary" onClick={downloadHandler}>
-      Download QR Code
+      Download Tiket
     </button>
   );
 };
