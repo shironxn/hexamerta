@@ -157,8 +157,10 @@ const KomentarSection = ({
   const [captchaToken, setCaptchaToken] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<any>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: KomentarForm) => {
+    setIsLoading(true);
     captchaRef.current.execute();
     setFormData(data);
   };
@@ -176,6 +178,7 @@ const KomentarSection = ({
         createKomentar(formData, captchaToken);
         captchaRef.current.resetCaptcha();
         setCaptchaToken("");
+        setIsLoading(false);
       } catch (error: any) {
         setError(error.message);
       }
@@ -218,8 +221,16 @@ const KomentarSection = ({
           <ErrorMessage errors={errors} name="pesan" />
         </div>
         <div className="form-control mt-4">
-          <button className="btn btn-primary" type="submit">
-            Kirim
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              "Kirim"
+            )}
           </button>
         </div>
         {error && (

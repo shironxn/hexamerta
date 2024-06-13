@@ -24,8 +24,10 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
 
   const [captchaToken, setCaptchaToken] = useState("");
   const [formData, setFormData] = useState<TiketForm>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = (data: TiketForm) => {
+    setIsLoading(true);
     captchaRef.current.execute();
     setFormData(data);
   };
@@ -35,6 +37,7 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
       createTiket(formData, captchaToken);
       captchaRef.current.resetCaptcha();
       setCaptchaToken("");
+      setIsLoading(false);
     }
   }, [captchaToken, formData]);
 
@@ -73,7 +76,7 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
             </div>
             <input
               type="text"
-              placeholder="ex: X6"
+              placeholder="contoh: X6"
               className="input input-bordered w-full"
               {...register("kelas")}
               required
@@ -106,7 +109,7 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
             </div>
             <input
               type="text"
-              placeholder="ex: 08XX"
+              placeholder="contoh: 08XX"
               className="input input-bordered w-full"
               {...register("nomor_telepon")}
               required
@@ -131,8 +134,16 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
           </div>
         </label>
         <div className="form-control mt-2">
-          <button type="submit" className="btn btn-primary">
-            Ikuti Acara
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              "Ikuti Acara"
+            )}
           </button>
         </div>
       </form>

@@ -80,11 +80,18 @@ export const getTiket = async (
 ) => {
   const supabase = createClient();
   const query = search
-    ? supabase.from("tiket").select().textSearch("nama_lengkap", search, {
-        type: "websearch",
-        config: "english",
-      })
-    : supabase.from("tiket").select();
+    ? supabase
+        .from("tiket")
+        .select()
+        .order("tanggal_dibuat", { ascending: false })
+        .textSearch("nama_lengkap", search, {
+          type: "websearch",
+          config: "english",
+        })
+    : supabase
+        .from("tiket")
+        .select()
+        .order("tanggal_dibuat", { ascending: false });
   const {
     data,
     error,
@@ -126,7 +133,7 @@ export const setStatusTiket = async (
     if (status === "digunakan" && tiket.status !== "terverifikasi")
       throw new Error("Tiket harus dalam status terverifikasi untuk digunakan");
   } catch (error: any) {
-    throw new Error(`Gagal mengatur status tiket: ${error.message}`);
+    throw error;
   }
 
   const { data, error } = await supabase

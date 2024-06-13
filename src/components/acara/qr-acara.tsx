@@ -7,7 +7,7 @@ import { setStatusTiket } from "@/actions/acara";
 import { Tiket } from "@/lib/types";
 import html2canvas from "html2canvas-pro";
 
-export const DownloadQRCode = () => {
+export const DownloadTiket = ({ nama }: { nama: string }) => {
   const downloadHandler = () => {
     html2canvas(document.body, {
       allowTaint: true,
@@ -18,19 +18,10 @@ export const DownloadQRCode = () => {
 
       const link = document.createElement("a");
       link.href = dataUrl;
-      link.download = "tiket.jpg";
+      link.download = `Tiket - ${nama}.jpg`;
 
       link.click();
     });
-
-    // const canvas = document.querySelector("canvas");
-    // if (canvas) {
-    //   const dataUrl = canvas.toDataURL("image/jpeg");
-    //   const link = document.createElement("a");
-    //   link.href = dataUrl;
-    //   link.download = "qrcode.jpeg";
-    //   link.click();
-    // }
   };
 
   return (
@@ -113,14 +104,42 @@ export const QRScan = () => {
       {scanResult && (
         <dialog id="my_modal_5" className="modal modal-open">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">Scan Result</h3>
-            <p className="py-4">
-              {scanResult instanceof Error
-                ? scanResult.message
-                : JSON.stringify(scanResult)}
-            </p>
+            <div>
+              {scanResult instanceof Error ? (
+                <div>
+                  <h3 className="font-bold text-lg">Tiket Tidak Valid</h3>
+                  <p className="py-4">{scanResult.message}</p>
+                </div>
+              ) : (
+                <div className="p-4 space-y-4">
+                  <h3 className="font-bold text-lg">Tiket Valid</h3>
+                  <div className="flex items-center">
+                    <p className="w-20 font-bold">Nama:</p>
+                    <p>{scanResult.nama_lengkap}</p>
+                  </div>
+
+                  <div className="flex items-center">
+                    <p className="w-20 font-bold">Kelas:</p>
+                    <p>{scanResult.kelas}</p>
+                  </div>
+
+                  <div className="flex items-center">
+                    <p className="w-20 font-bold">Telepon:</p>
+                    <p>{scanResult.nomor_telepon}</p>
+                  </div>
+
+                  <div className="flex items-center">
+                    <p className="w-20 font-bold">Email:</p>
+                    <p>{scanResult.email}</p>
+                  </div>
+                </div>
+              )}
+            </div>
             <div className="modal-action">
-              <button className="btn" onClick={() => setScanResult(null)}>
+              <button
+                className="btn"
+                onClick={() => document.location.reload()}
+              >
                 Close
               </button>
             </div>

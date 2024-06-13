@@ -1,5 +1,5 @@
 import { getAcaraById, getTiketById } from "@/actions/acara";
-import { DownloadQRCode, QRCode } from "@/components/acara/qr-acara";
+import { DownloadTiket, QRCode } from "@/components/acara/qr-acara";
 import { Copy } from "@/components/util/copy";
 
 export default async function Page({ params }: { params: { id: string } }) {
@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           </div>
           <Copy text={tiket.id} copy={tiket.id} />
           <div className="mt-8">
-            <DownloadQRCode />
+            <DownloadTiket nama={acara.nama} />
           </div>
         </div>
       </div>
