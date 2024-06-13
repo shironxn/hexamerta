@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useTransition } from "react";
-import { TiketPendaftaranForm } from "./tiket-form";
+import { TiketPendaftaranForm } from "@/components/acara/tiket-form";
 import Markdown from "react-markdown";
 import { QRCode } from "./qr-acara";
 import { Acara, Komentar, KomentarForm, KomentarFormSchema } from "@/lib/types";
