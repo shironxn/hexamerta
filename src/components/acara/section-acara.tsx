@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { FormAcara } from "./form-acara";
+import React, { useEffect, useRef, useState, useTransition } from "react";
+import { TiketPendaftaranForm } from "./tiket-form";
 import Markdown from "react-markdown";
 import { QRCode } from "./qr-acara";
 import { Acara, Komentar, KomentarForm, KomentarFormSchema } from "@/lib/types";
@@ -111,7 +111,7 @@ const TiketSection = ({
   if (!isVisible) return null;
   return (
     <div data-aos="fade-up" className="flex justify-center">
-      <FormAcara acara_id={acara.id} />
+      <TiketPendaftaranForm acara_id={acara.id} />
     </div>
   );
 };
@@ -151,13 +151,12 @@ const KomentarSection = ({
   } = useForm<KomentarForm>({
     resolver: zodResolver(KomentarFormSchema),
   });
-
   const captchaRef = useRef<any>();
   const [formData, setFormData] = useState<KomentarForm>();
   const [captchaToken, setCaptchaToken] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<any>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, startTransition] = useTransition();
 
   const onSubmit = async (data: KomentarForm) => {
     captchaRef.current.execute();
@@ -173,12 +172,12 @@ const KomentarSection = ({
   useEffect(() => {
     if (captchaToken && formData) {
       try {
-        setIsLoading(true);
-        formData.acara_id = acara_id;
-        createKomentar(formData, captchaToken);
-        captchaRef.current.resetCaptcha();
-        setCaptchaToken("");
-        setIsLoading(false);
+        startTransition(() => {
+          formData.acara_id = acara_id;
+          createKomentar(formData, captchaToken);
+          captchaRef.current.resetCaptcha();
+          setCaptchaToken("");
+        });
       } catch (error: any) {
         setError(error.message);
       }

@@ -7,7 +7,6 @@ import { Acara, TiketForm, Tiket, KomentarForm, Komentar } from "@/lib/types";
 import { PostgrestError } from "@supabase/supabase-js";
 import { notFound, redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { text } from "stream/consumers";
 
 export const getUser = async () => {
   const supabase = createClient();
@@ -16,56 +15,36 @@ export const getUser = async () => {
 
 export const getAcara = async () => {
   const supabase = createClient();
+
   const { data, error }: { data: Acara | null; error: PostgrestError | null } =
     await supabase.from("acara").select().single();
+
   if (!data) {
     return notFound();
   }
+
   if (error) {
-    throw error;
+    throw new Error(error.message);
   }
+
   return data;
 };
 
 export const getAcaraById = async (id: string) => {
   const supabase = createClient();
-  const { data, error } = await supabase
-    .from("acara")
-    .select()
-    .eq("id", id)
-    .single<Acara>();
+
+  const { data, error }: { data: Acara | null; error: PostgrestError | null } =
+    await supabase.from("acara").select().eq("id", id).single();
+
   if (!data) {
     return notFound();
   }
+
   if (error) {
-    throw error;
+    throw new Error(error.message);
   }
+
   return data;
-};
-
-export const countTiket = async (acara_id: string) => {
-  const supabase = createClient();
-
-  const { count: usedTickets, error: errorUsed } = await supabase
-    .from("tiket")
-    .select("count", { count: "exact" })
-    .match({ acara_id: acara_id, status: "digunakan" });
-
-  if (errorUsed) {
-    throw errorUsed;
-  }
-
-  const { count: verifiedTickets, error: errorVerified } = await supabase
-    .from("tiket")
-    .select("count", { count: "exact" })
-    .match({ acara_id: acara_id, status: "terverifikasi" });
-
-  if (errorVerified) {
-    throw errorVerified;
-  }
-
-  const totalCount = Number(usedTickets) + Number(verifiedTickets);
-  return totalCount;
 };
 
 export const createTiket = async (
@@ -75,15 +54,19 @@ export const createTiket = async (
   if (!captchaToken) {
     throw new Error("missing captcha token");
   }
+
   const supabase = createClient();
+
   const { data, error } = await supabase
     .from("tiket")
     .insert<TiketForm>(formData)
     .select()
     .single<Tiket>();
+
   if (error) {
-    throw error;
+    throw new Error(error.message);
   }
+
   redirect(`/acara/tiket/${data.id}`);
 };
 
@@ -93,6 +76,7 @@ export const getTiket = async (
   filter: "semua" | "terverifikasi" | "menunggu" | "ditolak" | "digunakan"
 ) => {
   const supabase = createClient();
+
   const query = search
     ? supabase
         .from("tiket")
@@ -106,6 +90,7 @@ export const getTiket = async (
         .from("tiket")
         .select()
         .order("tanggal_dibuat", { ascending: false });
+
   const {
     data,
     error,
@@ -114,23 +99,53 @@ export const getTiket = async (
       ? { acara_id: acaraId }
       : { acara_id: acaraId, status: filter }
   );
+
   if (error) {
-    throw error;
+    throw new Error(error.message);
   }
+
   return data;
 };
 
 export const getTiketById = async (id: string) => {
   const supabase = createClient();
+
   const { data, error } = await supabase
     .from("tiket")
     .select()
     .eq("id", id)
     .single<Tiket>();
+
   if (error) {
-    throw error;
+    throw new Error(error.message);
   }
+
   return data;
+};
+
+export const countTiket = async (acara_id: string) => {
+  const supabase = createClient();
+
+  const { count: usedTickets, error: errorUsed } = await supabase
+    .from("tiket")
+    .select("count", { count: "exact" })
+    .match({ acara_id: acara_id, status: "digunakan" });
+
+  if (errorUsed) {
+    throw new Error(errorUsed.message);
+  }
+
+  const { count: verifiedTickets, error: errorVerified } = await supabase
+    .from("tiket")
+    .select("count", { count: "exact" })
+    .match({ acara_id: acara_id, status: "terverifikasi" });
+
+  if (errorVerified) {
+    throw new Error(errorVerified.message);
+  }
+
+  const totalCount = Number(usedTickets) + Number(verifiedTickets);
+  return totalCount;
 };
 
 export const setStatusTiket = async (
@@ -147,7 +162,7 @@ export const setStatusTiket = async (
     if (status === "digunakan" && tiket.status !== "terverifikasi")
       throw new Error("Tiket harus dalam status terverifikasi untuk digunakan");
   } catch (error: any) {
-    throw error;
+    throw new Error(error.message);
   }
 
   const { data, error } = await supabase
@@ -157,20 +172,20 @@ export const setStatusTiket = async (
     .select()
     .single<Tiket>();
   if (error) {
-    throw error;
+    throw new Error(error.message);
   }
 
   if (status === "terverifikasi") {
     await sendEmail(data);
   }
 
-  revalidatePath("/acara/dashboard");
   return data;
 };
 
 const sendEmail = async (tiket: Tiket) => {
   try {
     const acara = await getAcaraById(tiket.acara_id);
+
     const qrCodeDataUrl = await QRCode.toDataURL(
       tiket.id || "invalid ticket id"
     );
@@ -191,10 +206,10 @@ const sendEmail = async (tiket: Tiket) => {
     try {
       await transporter.sendMail(mailOptions);
     } catch (error: any) {
-      throw error;
+      throw new Error(error.message);
     }
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new Error(error.message);
   }
 };
 
@@ -205,18 +220,23 @@ export const createKomentar = async (
   if (!captchaToken) {
     throw new Error("missing captcha token");
   }
+
   const supabase = createClient();
+
   const { error } = await supabase
     .from("komentar")
     .insert<KomentarForm>(formData);
+
   if (error) {
-    throw error;
+    throw new Error(error.message);
   }
+
   revalidatePath(`/acara/${formData.acara_id}`);
 };
 
 export const getKomentar = async (acaraId: string) => {
   const supabase = createClient();
+
   const {
     data,
     error,
@@ -226,21 +246,25 @@ export const getKomentar = async (acaraId: string) => {
     .order("tanggal_dibuat", { ascending: false })
     .eq("acara_id", acaraId);
   if (error) {
-    throw error;
+    throw new Error(error.message);
   }
+
   return data;
 };
 
 export const deleteKomentar = async (id: string) => {
   const supabase = createClient();
+
   const { data, error } = await supabase
     .from("komentar")
     .delete()
     .eq("id", id)
     .select()
     .single<Komentar>();
+
   if (error) {
-    throw error;
+    throw new Error(error.message);
   }
+
   revalidatePath(`/acara/${data.acara_id}`);
 };

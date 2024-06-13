@@ -5,7 +5,8 @@ import { Login, LoginSchema } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { ErrorMessage } from "@hookform/error-message";
 
 export const LoginForm = () => {
   const router = useRouter();
@@ -13,17 +14,21 @@ export const LoginForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Login>({ resolver: zodResolver(LoginSchema) });
-
+  } = useForm<Login>({
+    resolver: zodResolver(LoginSchema),
+  });
+  const [isLoading, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
-  const onSubmit = async (data: Login) => {
-    try {
-      await signIn(data);
-      router.push("/acara/dashboard");
-    } catch (error: any) {
-      setError(error.message);
-    }
+  const onSubmit = (data: Login) => {
+    startTransition(async () => {
+      try {
+        await signIn(data);
+        router.push("/acara/dashboard");
+      } catch (error: any) {
+        setError(error.message);
+      }
+    });
   };
 
   return (
@@ -38,6 +43,7 @@ export const LoginForm = () => {
           className="input input-bordered w-full"
           required
         />
+        <ErrorMessage errors={errors} name="email" />
       </div>
       <div className="form-control">
         <label className="label">
@@ -49,10 +55,15 @@ export const LoginForm = () => {
           className="input input-bordered w-full"
           required
         />
+        <ErrorMessage errors={errors} name="password" />
       </div>
       <div className="form-control mt-4">
-        <button className="btn btn-primary" type="submit">
-          Login
+        <button type="submit" className="btn btn-primary" disabled={isLoading}>
+          {isLoading ? (
+            <span className="loading loading-spinner"></span>
+          ) : (
+            "Login"
+          )}
         </button>
       </div>
       {error && (
