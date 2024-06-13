@@ -7,6 +7,7 @@ import { Acara, TiketForm, Tiket, KomentarForm, Komentar } from "@/lib/types";
 import { PostgrestError } from "@supabase/supabase-js";
 import { notFound, redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { text } from "stream/consumers";
 
 export const getUser = async () => {
   const supabase = createClient();
@@ -162,21 +163,31 @@ export const setStatusTiket = async (
   }
 
   if (status === "terverifikasi") {
+    await sendEmail(data);
+  }
+
+  revalidatePath("/acara/dashboard");
+  return data;
+};
+
+const sendEmail = async (tiket: Tiket) => {
+  try {
+    const acara = await getAcaraById(tiket.acara_id);
     const qrCodeDataUrl = await QRCode.toDataURL(
-      data.id || "invalid ticket id"
+      tiket.id || "invalid ticket id"
     );
 
     const mailOptions = {
       from: process.env.NEXT_PUBLIC_NODEMAILER_USER,
-      to: data.email,
-      subject: "Tiket Anda Telah Terverifikasi",
-      html: `
-        <p>Halo,</p>
-        <p>Tiket Anda telah berhasil terverifikasi.</p>
-        <p>QR Code tiket Anda ada di lampiran bawah ini.</p>
-        <img src="${qrCodeDataUrl}" alt="QR Code Tiket">
-        <p>Terima kasih!</p>
-      `,
+      to: tiket.email,
+      subject: `Selamat! Tiket Anda Telah Terverifikasi | ${acara.penyelenggara}`,
+      text: `Hai, Tiket anda dari acara ${acara.nama} telah sukses terverifikasi. QR Code bisa Anda temukan di lampiran berikut.`,
+      attachments: [
+        {
+          filename: "qrcode.png",
+          path: qrCodeDataUrl,
+        },
+      ],
     };
 
     try {
@@ -184,10 +195,9 @@ export const setStatusTiket = async (
     } catch (error: any) {
       throw error;
     }
+  } catch (error) {
+    throw error;
   }
-
-  revalidatePath("/acara/dashboard");
-  return data;
 };
 
 export const createKomentar = async (
