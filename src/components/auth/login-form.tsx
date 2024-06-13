@@ -20,7 +20,7 @@ export const LoginForm = () => {
 
   const onSubmit = (data: Login) => {
     startTransition(() => {
-      signIn(data).then((err) => setError(err));
+      signIn(data).then((result) => setError(result.error));
     });
   };
 

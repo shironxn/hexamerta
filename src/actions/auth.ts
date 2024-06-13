@@ -9,7 +9,7 @@ export async function signIn(formData: Login) {
 
   const { error } = await supabase.auth.signInWithPassword(formData);
   if (error) {
-    return error.message;
+    return { error: error.message };
   }
 
   redirect("/acara/dashboard");
@@ -20,7 +20,7 @@ export async function signOut() {
 
   const { error } = await supabase.auth.signOut();
   if (error) {
-    throw new Error(error.message);
+    return { error: error.message };
   }
 
   redirect("/");

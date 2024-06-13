@@ -18,7 +18,7 @@ export const SectionAcara = ({
   komentar,
 }: {
   acara: Acara;
-  komentar: Komentar[] | null;
+  komentar: Komentar[] | null | undefined;
 }) => {
   const [section, setSection] = useState("deskripsi");
 
@@ -142,7 +142,7 @@ const KomentarSection = ({
 }: {
   isVisible: boolean;
   acara_id: string;
-  komentar: Komentar[] | null;
+  komentar: Komentar[] | null | undefined;
 }) => {
   const {
     register,

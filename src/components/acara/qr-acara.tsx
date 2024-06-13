@@ -94,9 +94,10 @@ export const QRScan = () => {
 
   useEffect(() => {
     scanData &&
-      setStatusTiket(scanData, "digunakan")
-        .then(setScanResult)
-        .catch((error: any) => setScanError(error.message));
+      setStatusTiket(scanData, "digunakan").then((result) => {
+        result.data && setScanResult(result.data);
+        result.error && setScanError(result.error);
+      });
   }, [scanData]);
 
   return (

@@ -14,14 +14,15 @@ type PropsFilter =
   | "digunakan";
 
 export const TableTiket = ({ acara_id }: { acara_id: string }) => {
-  const [tiket, setTiket] = useState<Tiket[] | null>(null);
+  const [tiket, setTiket] = useState<Tiket[] | null | undefined>(null);
   const [filter, setFilter] = useState<PropsFilter>("semua");
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    getTiket(acara_id, search, filter)
-      .then(setTiket)
-      .catch(() => setTiket(null));
+    getTiket(acara_id, search, filter).then((result) => {
+      if (result.error) throw new Error(result.error);
+      setTiket(result.data);
+    });
   }, [acara_id, filter, search]);
   return (
     <div className="space-y-8">
@@ -86,7 +87,11 @@ export const TableTiket = ({ acara_id }: { acara_id: string }) => {
                         className="select select-ghost max-w-xs"
                         onChange={(e) => {
                           item.status = e.target.value as PropsTiket;
-                          setStatusTiket(item.id, item.status);
+                          setStatusTiket(item.id, item.status).then(
+                            (result) => {
+                              if (result.error) throw new Error(result.error);
+                            }
+                          );
                         }}
                         value={item.status}
                       >
