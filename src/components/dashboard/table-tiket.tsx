@@ -1,6 +1,6 @@
 "use client";
 
-import { getTiket, setStatusTiket } from "@/actions/acara";
+import { countTiket, getTiket, setStatusTiket } from "@/actions/acara";
 import { Tiket } from "@/lib/types";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -17,15 +17,30 @@ export const TableTiket = ({ acara_id }: { acara_id: string }) => {
   const [tiket, setTiket] = useState<Tiket[] | null | undefined>(null);
   const [filter, setFilter] = useState<PropsFilter>("semua");
   const [search, setSearch] = useState("");
+  const [count, setCount] = useState<
+    | {
+        menunggu: number | null;
+        terverifikasi: number | null;
+        ditolak: number | null;
+        digunakan: number | null;
+      }
+    | null
+    | undefined
+  >(null);
 
   useEffect(() => {
     getTiket(acara_id, search, filter).then((result) => {
       if (result.error) throw new Error(result.error);
       setTiket(result.data);
     });
+    countTiket(acara_id).then((result) => {
+      if (result.error) throw new Error(result.error);
+      setCount(result.data);
+    });
   }, [acara_id, filter, search]);
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 w-full container">
       <div className="flex gap-2">
         <label className="input input-bordered flex items-center gap-2 w-full">
           <input
@@ -48,8 +63,8 @@ export const TableTiket = ({ acara_id }: { acara_id: string }) => {
         </select>
       </div>
       {tiket && (
-        <div className="overflow-x-auto space-y-8">
-          <table className="table table-xs md:table-md">
+        <div className="overflow-x-auto space-y-8 max-h-[600px]">
+          <table className="table table-xs">
             {/* head */}
             <thead>
               <tr>
@@ -109,6 +124,30 @@ export const TableTiket = ({ acara_id }: { acara_id: string }) => {
                     </td>
                   </tr>
                 ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {count && (
+        <div className="overflow-x-auto">
+          <table className="table table-xs text-center font-bold">
+            {/* head */}
+            <thead>
+              <tr className="border-none">
+                <th>MENUNGGU</th>
+                <th>TERVERIFIKASI</th>
+                <th>DITOLAK</th>
+                <th>DIGUNAKAN</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* row 1 */}
+              <tr className="border-none">
+                <td>{count.menunggu}</td>
+                <td>{count.terverifikasi}</td>
+                <td>{count.ditolak}</td>
+                <td>{count.digunakan}</td>
+              </tr>
             </tbody>
           </table>
         </div>

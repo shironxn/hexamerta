@@ -34,10 +34,10 @@ export default async function Page({ params }: Props) {
   const { data: acaraData, error: acaraError } = await getAcaraById(params.id);
   if (acaraError) throw new Error(acaraError);
 
-  const { data: tiketData, error: tiketError } = await countTiket(
+  const { data: countData, error: countError } = await countTiket(
     String(acaraData?.id)
   );
-  if (tiketError) throw new Error(tiketError);
+  if (countError) throw new Error(countError);
 
   const { data: komentarData, error: komentarError } = await getKomentar(
     params.id
@@ -121,7 +121,11 @@ export default async function Page({ params }: Props) {
                   <Users />
                   <div>
                     <p className="text-xs">Peserta</p>
-                    <p className="font-bold text-sm">{tiketData}</p>
+                    {countData?.terverifikasi && countData?.digunakan && (
+                      <p className="font-bold text-sm">
+                        {countData.terverifikasi + countData.digunakan}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>

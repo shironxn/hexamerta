@@ -7,7 +7,6 @@ import { Acara, TiketForm, Tiket, KomentarForm, Komentar } from "@/lib/types";
 import { PostgrestError } from "@supabase/supabase-js";
 import { notFound, redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { error } from "console";
 
 export const getUser = async () => {
   const supabase = createClient();
@@ -134,26 +133,50 @@ export const getTiketById = async (id: string) => {
 export const countTiket = async (acara_id: string) => {
   const supabase = createClient();
 
-  const { count: usedTickets, error: errorUsed } = await supabase
+  const { count: menunggu, error: menungguError } = await supabase
     .from("tiket")
     .select("count", { count: "exact" })
-    .match({ acara_id: acara_id, status: "digunakan" });
+    .match({ acara_id: acara_id, status: "menunggu" });
 
-  if (errorUsed) {
-    return { error: errorUsed.message };
+  if (menungguError) {
+    return { error: menungguError.message };
   }
 
-  const { count: verifiedTickets, error: errorVerified } = await supabase
+  const { count: terverifikasi, error: terverifikasiError } = await supabase
     .from("tiket")
     .select("count", { count: "exact" })
     .match({ acara_id: acara_id, status: "terverifikasi" });
 
-  if (errorVerified) {
-    return { error: errorVerified.message };
+  if (terverifikasiError) {
+    return { error: terverifikasiError.message };
   }
 
-  const totalCount = Number(usedTickets) + Number(verifiedTickets);
-  return { data: totalCount };
+  const { count: ditolak, error: ditolakError } = await supabase
+    .from("tiket")
+    .select("count", { count: "exact" })
+    .match({ acara_id: acara_id, status: "ditolak" });
+
+  if (ditolakError) {
+    return { error: ditolakError.message };
+  }
+
+  const { count: digunakan, error: digunakanError } = await supabase
+    .from("tiket")
+    .select("count", { count: "exact" })
+    .match({ acara_id: acara_id, status: "digunakan" });
+
+  if (digunakanError) {
+    return { error: digunakanError.message };
+  }
+
+  return {
+    data: {
+      menunggu: menunggu,
+      terverifikasi: terverifikasi,
+      ditolak: ditolak,
+      digunakan: digunakan,
+    },
+  };
 };
 
 export const setStatusTiket = async (
