@@ -32,8 +32,9 @@ export const TiketPendaftaranForm = ({ acara_id }: { acara_id: string }) => {
 
   useEffect(() => {
     if (captchaToken && formData) {
-      startTransition(() => {
-        createTiket(formData, captchaToken);
+      startTransition(async () => {
+        const { error } = await createTiket(formData, captchaToken);
+        if (error) throw new Error(error);
         captchaRef.current.resetCaptcha();
         setCaptchaToken("");
       });

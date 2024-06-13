@@ -60,7 +60,7 @@ export const createTiket = async (
   captchaToken: string
 ) => {
   if (!captchaToken) {
-    throw new Error("missing captcha token");
+    return { error: "missing captcha token" };
   }
 
   const supabase = createClient();
@@ -72,7 +72,7 @@ export const createTiket = async (
     .single<Tiket>();
 
   if (error) {
-    throw new Error(error.message);
+    return { error: error.message };
   }
 
   redirect(`/acara/tiket/${data.id}`);
@@ -167,11 +167,11 @@ export const setStatusTiket = async (
     return { error: tiketError };
   }
 
-  if (!tiketData) throw new Error("Tiket tidak ditemukan");
+  if (!tiketData) return { error: "Tiket tidak ditemukan" };
   if (status === "digunakan" && tiketData.status === "digunakan")
-    throw new Error("Tiket sudah digunakan sebelumnya");
+    return { error: "Tiket sudah digunakan sebelumnya" };
   if (status === "digunakan" && tiketData.status !== "terverifikasi")
-    throw new Error("Tiket harus dalam status terverifikasi untuk digunakan");
+    return { error: "Tiket harus dalam status terverifikasi untuk digunakan" };
 
   const { data, error } = await supabase
     .from("tiket")
@@ -225,7 +225,7 @@ export const createKomentar = async (
   captchaToken: string
 ) => {
   if (!captchaToken) {
-    throw new Error("missing captcha token");
+    return { error: "missing captcha token" };
   }
 
   const supabase = createClient();
