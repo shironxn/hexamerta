@@ -7,7 +7,7 @@ import { signOut } from "@/actions/auth";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 
-export const Navbar = ({ user }: { user: User | null }) => {
+export const Navbar = ({ user }: { user: User | null | undefined }) => {
   const router = useRouter();
   return (
     <nav className="py-2 px-4 top-0 inset-x-0 items-center z-50 text-secondary flex justify-between md:rounded-md fixed md:mt-2">

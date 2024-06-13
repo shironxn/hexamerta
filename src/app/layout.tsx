@@ -21,7 +21,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await getUser();
+  const { data } = await getUser();
   return (
     <html lang="en">
       <head>
@@ -30,7 +30,7 @@ export default async function RootLayout({
       <body className={poppins.className}>
         <ThemeProvider>
           <AOSComponent>
-            <Navbar user={user.data.user} />
+            <Navbar user={data?.user} />
             <div className="flex justify-center container">{children}</div>
           </AOSComponent>
         </ThemeProvider>
