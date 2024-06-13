@@ -64,10 +64,8 @@ export const countTiket = async (acara_id: string) => {
     throw errorVerified;
   }
 
-  if (usedTickets && verifiedTickets) {
-    const totalCount = usedTickets + verifiedTickets;
-    return totalCount;
-  }
+  const totalCount = Number(usedTickets) + Number(verifiedTickets);
+  return totalCount;
 };
 
 export const createTiket = async (
