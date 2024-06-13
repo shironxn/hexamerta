@@ -111,7 +111,7 @@ const TiketSection = ({
   if (!isVisible) return null;
   return (
     <div data-aos="fade-up">
-      <h4>Sayangnya, Pendaftaran Tiket Telah Ditutup</h4>
+      <h4>Pendaftaran Tiket Telah Ditutup</h4>
       <p>
         Terima kasih kepada semua yang telah berpartisipasi dalam acara ini!
         Kami sangat menghargai dukungan dan antusiasme Anda. 🫰
