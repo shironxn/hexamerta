@@ -52,6 +52,7 @@ export const TableTiket = ({ acara_id }: { acara_id: string }) => {
             {/* head */}
             <thead>
               <tr>
+                <th>NO</th>
                 <th>NAMA</th>
                 <th>KELAS</th>
                 <th>EMAIL</th>
@@ -67,6 +68,7 @@ export const TableTiket = ({ acara_id }: { acara_id: string }) => {
               {tiket &&
                 tiket.map((item: Tiket, i: number) => (
                   <tr key={i}>
+                    <td>{i + 1}</td>
                     <td>
                       <div className="flex items-center gap-3">
                         <div>

@@ -46,7 +46,7 @@ export const TiketFormSchema = z.object({
   nama_lengkap: z
     .string()
     .min(4, "Nama lengkap harus memiliki setidaknya 4 karakter")
-    .max(30, "Nama lengkap maksimal 30 karakter"),
+    .max(50, "Nama lengkap maksimal 50 karakter"),
   kelas: z
     .string()
     .regex(
@@ -71,7 +71,7 @@ export const KomentarFormSchema = z.object({
   pesan: z
     .string()
     .min(1)
-    .max(50, "Pesan harus memiliki antara 1 hingga 50 karakter"),
+    .max(100, "Pesan harus memiliki antara 1 hingga 100 karakter"),
 });
 
 export type Login = z.infer<typeof LoginSchema>;

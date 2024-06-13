@@ -160,7 +160,6 @@ const KomentarSection = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: KomentarForm) => {
-    setIsLoading(true);
     captchaRef.current.execute();
     setFormData(data);
   };
@@ -174,6 +173,7 @@ const KomentarSection = ({
   useEffect(() => {
     if (captchaToken && formData) {
       try {
+        setIsLoading(true);
         formData.acara_id = acara_id;
         createKomentar(formData, captchaToken);
         captchaRef.current.resetCaptcha();

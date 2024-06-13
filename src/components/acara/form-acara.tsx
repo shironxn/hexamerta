@@ -27,13 +27,13 @@ export const FormAcara = ({ acara_id }: { acara_id: string }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = (data: TiketForm) => {
-    setIsLoading(true);
     captchaRef.current.execute();
     setFormData(data);
   };
 
   useEffect(() => {
     if (captchaToken && formData) {
+      setIsLoading(true);
       createTiket(formData, captchaToken);
       captchaRef.current.resetCaptcha();
       setCaptchaToken("");
