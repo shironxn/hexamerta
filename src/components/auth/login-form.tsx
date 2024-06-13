@@ -19,8 +19,8 @@ export const LoginForm = () => {
   const [error, setError] = useState<string | null>(null);
 
   const onSubmit = (data: Login) => {
-    startTransition(async () => {
-      signIn(data).then((err) => setError(err.message));
+    startTransition(() => {
+      signIn(data).then((err) => setError(err));
     });
   };
 
