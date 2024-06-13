@@ -110,8 +110,13 @@ const TiketSection = ({
 }) => {
   if (!isVisible) return null;
   return (
-    <div data-aos="fade-up" className="flex justify-center">
-      <TiketPendaftaranForm acara_id={acara.id} />
+    <div data-aos="fade-up">
+      <h4>Sayangnya, Pendaftaran Tiket Telah Ditutup</h4>
+      <p>
+        Terima kasih kepada semua yang telah berpartisipasi dalam acara ini!
+        Kami sangat menghargai dukungan dan antusiasme Anda. 🫰
+      </p>
+      {/* <TiketPendaftaranForm acara_id={acara.id} /> */}
     </div>
   );
 };
@@ -124,12 +129,12 @@ const ShareSection = ({ isVisible }: { isVisible: boolean }) => {
       data-aos="fade-up"
     >
       <div>
-        <QRCode text={"https://bit.ly/hexamerta"} width={300} />
+        <QRCode text={window.location.href} width={300} />
       </div>
       <div className="text-center md:text-left md:w-1/2 flex flex-col items-center md:items-start">
         <h2 className="md:mt-0">Share Event</h2>
         <p>Pindai kode QR untuk mendapatkan tautan acara.</p>
-        <Copy text="Salin tautan." copy="https://bit.ly/hexamerta" />
+        <Copy text="Salin tautan." copy={window.location.href} />
       </div>
     </div>
   );
