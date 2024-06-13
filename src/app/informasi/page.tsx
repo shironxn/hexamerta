@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Page() {
   return (
-    <div className="text-center items-center flex h-screen flex-col justify-center prose px-4">
+    <div className="text-center items-center flex min-h-screen flex-col justify-center prose px-4">
       <p>
         Untuk informasi lebih lanjut silahkan kunjungi IG{" "}
         <span>

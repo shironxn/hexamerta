@@ -14,7 +14,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center prose">
+    <div className="min-h-screen flex flex-col justify-center items-center prose">
       <h2>Something went wrong!</h2>
       <p>{error.message}</p>
       <button className="btn btn-outline" onClick={() => reset()}>

@@ -45,7 +45,7 @@ export default async function Page({ params }: Props) {
   if (komentarError) throw new Error(komentarError);
 
   return (
-    <div className="bg-base-300 pt-20 pb-10 w-full">
+    <div className="bg-base-300 pt-20 pb-10 w-full min-h-screen">
       {acaraData && (
         <div className="container mx-auto md:px-4" data-aos="fade-up">
           <div className="text-center md:text-left mb-8">

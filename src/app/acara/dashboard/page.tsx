@@ -6,7 +6,7 @@ export default async function Page() {
   if (error) throw new Error(error);
 
   return (
-    <div className="mt-20 h-screen px-2 md:px-0 w-full">
+    <div className="mt-20 min-h-screen px-2 md:px-0 w-full">
       {data && <TableTiket acara_id={data.id} />}
     </div>
   );
