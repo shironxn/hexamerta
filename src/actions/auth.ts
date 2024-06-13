@@ -7,12 +7,12 @@ import { Login } from "@/lib/types";
 export async function signIn(formData: Login) {
   const supabase = createClient();
 
-  const { data, error } = await supabase.auth.signInWithPassword(formData);
+  const { error } = await supabase.auth.signInWithPassword(formData);
   if (error) {
-    throw new Error(error.message);
+    return error;
   }
 
-  return data;
+  redirect("/acara/dashboard");
 }
 
 export async function signOut() {

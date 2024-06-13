@@ -3,13 +3,11 @@
 import { signIn } from "@/actions/auth";
 import { Login, LoginSchema } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
 import { ErrorMessage } from "@hookform/error-message";
 
 export const LoginForm = () => {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -22,12 +20,7 @@ export const LoginForm = () => {
 
   const onSubmit = (data: Login) => {
     startTransition(async () => {
-      try {
-        await signIn(data);
-        router.push("/acara/dashboard");
-      } catch (error: any) {
-        setError(error.message);
-      }
+      signIn(data).then((err) => setError(err.message));
     });
   };
 
