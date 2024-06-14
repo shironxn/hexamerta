@@ -54,7 +54,6 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // refreshing the auth token
   const user = await supabase.auth.getUser();
 
   if (request.nextUrl.pathname.startsWith("/acara/dashboard") && user.error) {

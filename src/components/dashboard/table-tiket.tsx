@@ -47,7 +47,9 @@ export const TableTiket = ({ acara_id }: { acara_id: string }) => {
             type="text"
             className="grow"
             placeholder="Search"
-            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) =>
+              e.key === "Enter" && setSearch(e.currentTarget.value)
+            }
           />
           <Search className="w-4" />
         </label>
@@ -63,7 +65,7 @@ export const TableTiket = ({ acara_id }: { acara_id: string }) => {
         </select>
       </div>
       {tiket && (
-        <div className="overflow-x-auto space-y-8 max-h-[600px]">
+        <div className="overflow-x-auto space-y-8 max-h-[400px]">
           <table className="table table-xs">
             {/* head */}
             <thead>

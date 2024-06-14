@@ -66,7 +66,7 @@ export default async function Page({ params }: Props) {
               <div className="text-center md:text-left">
                 <h3 className="text-xl font-semibold">Detail Acara</h3>
               </div>
-              <div className="items-center grid-cols-2 grid gap-4 md:gap-2 md:grid-cols-1">
+              <div className="items-center justify-center grid-cols-2 grid gap-4 md:gap-2 md:grid-cols-1">
                 <div className="flex items-center gap-2">
                   <User />
                   <div>
