@@ -5,13 +5,14 @@ import { TiketPendaftaranForm } from "@/components/acara/tiket-form";
 import Markdown from "react-markdown";
 import { QRCode } from "./qr-acara";
 import { Acara, Komentar, KomentarForm, KomentarFormSchema } from "@/lib/types";
-import { User } from "lucide-react";
+import { UserIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createKomentar, deleteKomentar, getUser } from "@/actions/acara";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { ErrorMessage } from "@hookform/error-message";
 import { Copy } from "@/components/util/copy";
+import { User } from "@supabase/supabase-js";
 
 export const SectionAcara = ({
   acara,
@@ -160,7 +161,7 @@ const KomentarSection = ({
   const [formData, setFormData] = useState<KomentarForm>();
   const [captchaToken, setCaptchaToken] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [user, setUser] = useState<any>();
+  const [user, setUser] = useState<User | undefined | null>(null);
   const [isLoading, startTransition] = useTransition();
 
   const onSubmit = async (data: KomentarForm) => {
@@ -170,7 +171,7 @@ const KomentarSection = ({
 
   useEffect(() => {
     getUser()
-      .then((data) => setUser(data))
+      .then((result) => setUser(result.data?.user))
       .catch(() => null);
   }, []);
 
@@ -269,7 +270,7 @@ const KomentarSection = ({
                   <div className="avatar placeholder">
                     <div className="bg-neutral text-neutral-content rounded-full w-8 h-8">
                       <span className="text-3xl">
-                        <User />
+                        <UserIcon />
                       </span>
                     </div>
                   </div>
